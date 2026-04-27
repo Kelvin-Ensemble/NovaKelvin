@@ -4,26 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48ce7faf-ed2d-4f37-84ac-1fa1d42b874c" name="Changes" comment="pre-stripe integration">
-      <change afterPath="$PROJECT_DIR$/ticketing/frontend/src/components/StripeCheckout.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ticketing/templates/ticket_purchase_complete.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ticketing/webhook_handler.py" afterDir="false" />
+    <list default="true" id="48ce7faf-ed2d-4f37-84ac-1fa1d42b874c" name="Changes" comment="fixed requirement.txt encoding">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NovaKelvin/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/NovaKelvin/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NovaKelvin/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/NovaKelvin/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_site/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_site/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/theme/static/css/dist/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/theme/static/css/dist/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/frontend/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/frontend/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/frontend/src/components/OrderSummary.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/frontend/src/components/OrderSummary.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/frontend/src/services/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/frontend/src/services/api.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/static/ticketing/assets/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/static/ticketing/assets/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +24,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -52,8 +39,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/YukiSuter/NovaKelvin&quot;,
-    &quot;accountId&quot;: &quot;8cafb7a4-5a7b-4d9b-89f5-681491e912b5&quot;
+    &quot;url&quot;: &quot;https://github.com/Kelvin-Ensemble/NovaKelvin&quot;,
+    &quot;accountId&quot;: &quot;5ed9e0f5-78f7-4288-9248-74a376532e4e&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -74,12 +61,16 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.pycharm.django.structure.promotion.once.per.project": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Shell Script.NovaKelvin + TailwindCSS.executor": "Run",
     "Shell Script.TaillwindCSS Watcher.executor": "Run",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "django.template.preview.state": "SHOW_EDITOR_AND_PREVIEW",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "railway-deployment-testing",
+    "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "last_opened_file_path": "/home/yukisuter/PycharmProjects/NovaKelvin/ticketing/templates",
     "node.js.detected.package.eslint": "true",
@@ -87,7 +78,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
     "to.speed.mode.migration.done": "true",
     "ts.external.directory.path": "/opt/pycharm/plugins/javascript-plugin/jsLanguageServicesImpl/external",
     "vue.rearranger.settings.migration": "true"
@@ -106,7 +97,7 @@
       <recent name="$PROJECT_DIR$/templates" />
     </key>
   </component>
-  <component name="RunManager" selected="Compound.NovaKelvin + TailwindCSS">
+  <component name="RunManager" selected="Django Server.NovaKelvin">
     <configuration name="NovaKelvin + TailwindCSS" type="CompoundRunConfigurationType">
       <toRun name="NovaKelvin" type="Python.DjangoServer" />
       <toRun name="TaillwindCSS Watcher" type="ShConfigurationType" />
@@ -122,13 +113,14 @@
         <env name="DJANGO_SETTINGS_MODULE" value="NovaKelvin.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.13 (NovaKelvin)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="DEBUG_JUST_MY_CODE" value="false" />
+      <option name="RUN_TOOL" value="" />
       <option name="launchJavascriptDebuger" value="false" />
-      <option name="port" value="8123" />
+      <option name="port" value="8000" />
       <option name="host" value="" />
       <option name="additionalOptions" value="" />
       <option name="browserUrl" value="" />
@@ -162,8 +154,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-PY-252.27397.106" />
-        <option value="bundled-python-sdk-4e2b1448bda8-9a97661f3031-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.27397.106" />
+        <option value="bundled-python-sdk-b63d5a1f7c97-b61e75351b1f-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-261.22158.340" />
       </set>
     </attachedChunks>
   </component>
@@ -179,6 +170,8 @@
       <workItem from="1764198663710" duration="2450000" />
       <workItem from="1764455097879" duration="9899000" />
       <workItem from="1764465334791" duration="18955000" />
+      <workItem from="1777300376958" duration="1096000" />
+      <workItem from="1777301510066" duration="4243000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit - Homepage there, about page wip">
       <option name="closed" value="true" />
@@ -228,7 +221,23 @@
       <option name="project" value="LOCAL" />
       <updated>1764469123076</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="an attempt at getting it to deploy on railway">
+      <option name="closed" value="true" />
+      <created>1777304242135</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1777304242136</updated>
+    </task>
+    <task id="LOCAL-00008" summary="fixed requirement.txt encoding">
+      <option name="closed" value="true" />
+      <created>1777305080027</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1777305080027</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -251,6 +260,8 @@
     <MESSAGE value="past concerts and committee page up" />
     <MESSAGE value="requirements.txt" />
     <MESSAGE value="pre-stripe integration" />
-    <option name="LAST_COMMIT_MESSAGE" value="pre-stripe integration" />
+    <MESSAGE value="an attempt at getting it to deploy on railway" />
+    <MESSAGE value="fixed requirement.txt encoding" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed requirement.txt encoding" />
   </component>
 </project>
