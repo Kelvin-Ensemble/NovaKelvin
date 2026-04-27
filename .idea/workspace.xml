@@ -4,21 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48ce7faf-ed2d-4f37-84ac-1fa1d42b874c" name="Changes" comment="pre-stripe integration">
-      <change beforePath="$PROJECT_DIR$/.idea/NovaKelvin.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/NovaKelvin.iml" afterDir="false" />
+    <list default="true" id="48ce7faf-ed2d-4f37-84ac-1fa1d42b874c" name="Changes" comment="an attempt at getting it to deploy on railway">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NovaKelvin/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/NovaKelvin/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_site/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_site/migrations/0002_remove_committeemember_id_alter_committeemember_role.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_site/migrations/0003_alter_committeemember_name_and_more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_site/migrations/0004_alter_committeemember_name_and_more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_site/migrations/0005_alter_committeemember_name_and_more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_site/migrations/0006_committeemember_id_alter_committeemember_name.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_site/migrations/0007_pastconcert_alter_committeemember_image.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_site/migrations/0008_remove_pastconcert_image.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_site/migrations/0009_alter_pastconcert_date.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_site/migrations/0010_alter_pastconcert_venue.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/theme/static/css/dist/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/theme/static/css/dist/styles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -184,7 +171,7 @@
       <workItem from="1764455097879" duration="9899000" />
       <workItem from="1764465334791" duration="18955000" />
       <workItem from="1777300376958" duration="1096000" />
-      <workItem from="1777301510066" duration="2605000" />
+      <workItem from="1777301510066" duration="3399000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit - Homepage there, about page wip">
       <option name="closed" value="true" />
@@ -234,7 +221,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764469123076</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="an attempt at getting it to deploy on railway">
+      <option name="closed" value="true" />
+      <created>1777304242135</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1777304242136</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -257,6 +252,7 @@
     <MESSAGE value="past concerts and committee page up" />
     <MESSAGE value="requirements.txt" />
     <MESSAGE value="pre-stripe integration" />
-    <option name="LAST_COMMIT_MESSAGE" value="pre-stripe integration" />
+    <MESSAGE value="an attempt at getting it to deploy on railway" />
+    <option name="LAST_COMMIT_MESSAGE" value="an attempt at getting it to deploy on railway" />
   </component>
 </project>
