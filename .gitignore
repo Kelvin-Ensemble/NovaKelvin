@@ -1,4 +1,5 @@
 .venv/
+.env
 
 # For IntelliJ idea based IDEs:
 
