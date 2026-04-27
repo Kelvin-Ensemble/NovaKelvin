@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 DEBUG = os.environ.get('DEBUG', 'True') != 'False'
 
 ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = ["https://kelvin-symphony.co.uk","http://127.0.0.1","https://www.kelvin-symphony.co.uk"]
+CSRF_TRUSTED_ORIGINS = ["https://kelvin-symphony.co.uk","http://127.0.0.1","https://staging.kelvin-symphony.co.uk","https://www.kelvin-symphony.co.uk"]
 
 # Application definition
 
