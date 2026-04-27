@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-g^tqacan%+xpr!6bp!4y$8gpf-k7624d@&tk3_r(2%)lx1z3g+'
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') != 'False'
@@ -92,11 +95,11 @@ WSGI_APPLICATION = 'NovaKelvin.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': 'mBXorgrJggUfIzKPpWMamjhqLrqfFJXD',
-        'HOST': 'shuttle.proxy.rlwy.net',
-        'PORT': '44274',
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('PGHOST'),
+        'PORT': os.environ.get('PGPORT', '5432'),
     }
 }
 
@@ -158,14 +161,12 @@ REST_FRAMEWORK = {
     ],
 }
 
-STRIPE_SECRET_KEY = 'sk_test_51SZ0XBBzBUhSO3HmggAfeq9QUm0MHLmfnUsQP0H75oCnWfoym3IRvHgR7aV2MVT1Xo5aaYuRASCCkuI2ksyqsTOt0098VRSCQ2'  # Replace with your actual secret key
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51SZ0XBBzBUhSO3HmkTTICWKMvWlOI7QYw5wrG83bh5eCdSUuPBPtfSeC430Q2YAJFU7s5ntRcVclaa0KdJhufEtR00eCr16f5I'  # Replace with your actual publishable key
-STRIPE_WEBHOOK_SECRET = 'whsec_479cc753ae59ad1b171441dd0428a9375e00c9322f930bc0d2022bedff8f736e'  # Replace with your webhook signing secret
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
+STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY')
+STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET")
 
 # Return URL for Stripe checkout (adjust to your frontend URL)
-STRIPE_RETURN_URL = 'http://localhost:8123/tickets/success'  # For development
-# STRIPE_RETURN_URL = 'https://yourdomain.com/checkout/return'  # For production
-
+STRIPE_RETURN_URL = os.environ.get("STRIPE_RETURN_URL")
 
 if DEBUG:
     # Add django_browser_reload only in DEBUG mode
