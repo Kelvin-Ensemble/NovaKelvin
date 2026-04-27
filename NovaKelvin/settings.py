@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-g^tqacan%+xpr!6bp!4y$8gpf-k7624d@&tk3_r(2%)lx1z3g+
 DEBUG = os.environ.get('DEBUG', 'True') != 'False'
 
 ALLOWED_HOSTS = ["*"]
-
+CSRF_TRUSTED_ORIGINS = ["kelvin-symphony.co.uk","127.0.0.1"]
 
 # Application definition
 
