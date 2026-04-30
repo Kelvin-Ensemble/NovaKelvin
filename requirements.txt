@@ -16,7 +16,7 @@ django-rest-auth==0.9.5
 django-saml2-auth-community==3.21.0
 django-tailwind==4.4.1
 djangorestframework==3.17.1
-djangorestframework-jwt==1.11.0
+djangorestframework_simplejwt==5.5.1
 dotenv==0.9.9
 elementpath==4.8.0
 grafana-django-saml2-auth==3.21.0
