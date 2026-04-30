@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -182,8 +182,8 @@ SAML2_AUTH = {
     # Paste the metadata URL from Google Admin here
     # 'METADATA_AUTO_CONF_URL': 'https://accounts.google.com/o/saml2/idp?idpid=C03eq3bhc',
     'METADATA_LOCAL_FILE_PATH': BASE_DIR / 'saml' / 'GoogleIDPMetadata.xml',
-    'ASSERTION_URL': 'https://cope-infringement-trinity-follow.trycloudflare.com/',  # Your site's base URL
-    'ENTITY_ID': 'https://cope-infringement-trinity-follow.trycloudflare.com/sso/acs/',
+    'ASSERTION_URL': 'https://staging.kelvin-symphony.co.uk',  # Your site's base URL
+    'ENTITY_ID': 'https://staging.kelvin-symphony.co.uk/sso/acs/',
 
     # Google sends email as the NameID, so map accordingly
     'ATTRIBUTES_MAP': {
@@ -202,7 +202,7 @@ SAML2_AUTH = {
     'AUTHN_REQUESTS_SIGNED': False,  # Google doesn't require signed requests
     'LOGOUT_REQUESTS_SIGNED': False,
 
-    'DEFAULT_NEXT_URL': '/dashboard/',  # Where to send users after login
+    'DEFAULT_NEXT_URL': '/admin/',  # Where to send users after login
     'CREATE_USER': True,
     'NEW_USER_PROFILE': {
         'USER_GROUPS': [],
