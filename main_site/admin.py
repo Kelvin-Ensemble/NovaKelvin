@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib import admin
+from unfold.admin import ModelAdmin  # add this
 from django.urls import reverse
 from django.utils.html import format_html_join
 
@@ -25,7 +26,7 @@ class TicketTypeAdminForm(forms.ModelForm):
         return linked
 
 @admin.register(Concert)
-class ConcertAdmin(admin.ModelAdmin):
+class ConcertAdmin(ModelAdmin):
     list_display = ("concert_name", "concert_date", "concert_time", "concert_location")
     readonly_fields = ("concert_ticket_types_display",)
 
@@ -59,7 +60,7 @@ class ConcertAdmin(admin.ModelAdmin):
 
 
 @admin.register(TicketType)
-class TicketTypeAdmin(admin.ModelAdmin):
+class TicketTypeAdmin(ModelAdmin):
     form = TicketTypeAdminForm  # <-- use the custom form
 
     readonly_fields = ["qty_available", "qty_sold"]
@@ -86,8 +87,8 @@ class TicketTypeAdmin(admin.ModelAdmin):
 
 
 @admin.register(Ticket)
-# class ticketAdmin(ExportMixin, admin.ModelAdmin):
-class ticketAdmin(admin.ModelAdmin):
+# class ticketAdmin(ExportMixin, ModelAdmin):
+class ticketAdmin(ModelAdmin):
     # resource_class = ticketResource
     list_display = ["name", "email", "transaction_ID", "ticket_type", "validity"]
     list_filter = ["for_concert", "ticket_type", "validity"]
