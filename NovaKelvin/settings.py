@@ -205,9 +205,9 @@ SAML2_AUTH = {
     'DEFAULT_NEXT_URL': '/admin/',  # Where to send users after login
     'CREATE_USER': True,
     'NEW_USER_PROFILE': {
-        'USER_GROUPS': [],
+        'USER_GROUPS': ['Committee'],
         'ACTIVE_STATUS': True,
-        'STAFF_STATUS': False,
+        'STAFF_STATUS': True,
         'SUPERUSER_STATUS': False,
     },
 
