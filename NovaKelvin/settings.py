@@ -219,3 +219,8 @@ SAML2_AUTH = {
         'root': {'level': 'DEBUG', 'handlers': ['stdout']},
     },
 }
+
+SESSION_COOKIE_SECURE = True  # must be True on HTTPS
+SESSION_COOKIE_SAMESITE = 'None'  # required for POST-back from Google
+CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = True
