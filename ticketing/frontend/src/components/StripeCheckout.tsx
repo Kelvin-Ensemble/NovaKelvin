@@ -106,7 +106,7 @@ export const StripeCheckout: React.FC<StripeCheckoutProps> = ({
             <h3 className="text-2xl font-bold text-gray-900 mb-2">Order Confirmation Issue</h3>
             <p className="text-gray-600 mb-6">
               We're having trouble confirming your order. Your payment may have been processed.
-              Please check your email or contact support with session ID:
+              Please check your email or contact <a href="mailto:webmaster@kelvin-ensemle.co.uk">webmaster@kelvin-ensemble.co.uk</a> with session ID:
               <span className="font-mono text-sm block mt-2">{sessionId.substring(0, 20)}...</span>
             </p>
             <Button onClick={onBack}>Back to Tickets</Button>

@@ -4,26 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48ce7faf-ed2d-4f37-84ac-1fa1d42b874c" name="Changes" comment="pre-stripe integration">
-      <change afterPath="$PROJECT_DIR$/ticketing/frontend/src/components/StripeCheckout.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ticketing/templates/ticket_purchase_complete.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ticketing/webhook_handler.py" afterDir="false" />
+    <list default="true" id="48ce7faf-ed2d-4f37-84ac-1fa1d42b874c" name="Changes" comment="stripe integration seems to work">
+      <change afterPath="$PROJECT_DIR$/saml/GoogleIDPMetadata.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/join_us.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ticketing/frontend/src/components/Donation.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NovaKelvin/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/NovaKelvin/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NovaKelvin/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/NovaKelvin/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_site/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_site/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_site/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_site/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/about.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/about.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/committee.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/committee.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/past_concerts.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/past_concerts.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/theme/static/css/dist/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/theme/static/css/dist/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/frontend/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ticketing/frontend/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/frontend/src/App.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ticketing/frontend/src/components/OrderSummary.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/frontend/src/components/OrderSummary.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/frontend/src/services/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/frontend/src/services/api.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/frontend/src/components/StripeCheckout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/frontend/src/components/StripeCheckout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/frontend/src/components/ui/Button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/frontend/src/components/ui/Button.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ticketing/static/ticketing/assets/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/static/ticketing/assets/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/templates/ticket_purchase.html" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/templates/ticket_purchase.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/templates/ticket_purchase_complete.html" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/templates/ticket_purchase_complete.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,42 +67,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Django Server.NovaKelvin + TailwindCSS.executor": "Run",
-    "Django Server.NovaKelvin.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Shell Script.NovaKelvin + TailwindCSS.executor": "Run",
-    "Shell Script.TaillwindCSS Watcher.executor": "Run",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "django.template.preview.state": "SHOW_EDITOR_AND_PREVIEW",
-    "git-widget-placeholder": "master",
-    "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "/home/yukisuter/PycharmProjects/NovaKelvin/ticketing/templates",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "to.speed.mode.migration.done": "true",
-    "ts.external.directory.path": "/opt/pycharm/plugins/javascript-plugin/jsLanguageServicesImpl/external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Django Server.NovaKelvin + TailwindCSS.executor&quot;: &quot;Run&quot;,
+    &quot;Django Server.NovaKelvin.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Shell Script.NovaKelvin + TailwindCSS.executor&quot;: &quot;Run&quot;,
+    &quot;Shell Script.TaillwindCSS Watcher.executor&quot;: &quot;Run&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR_AND_PREVIEW&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/yukisuter/PycharmProjects/NovaKelvin/saml&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/opt/pycharm/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/saml" />
+      <recent name="$PROJECT_DIR$/ticketing/frontend/src/components" />
+      <recent name="$PROJECT_DIR$/templates" />
       <recent name="$PROJECT_DIR$/ticketing/templates" />
       <recent name="$PROJECT_DIR$/static/img/about" />
-      <recent name="$PROJECT_DIR$/templates" />
-      <recent name="$PROJECT_DIR$/static/img/header" />
-      <recent name="$PROJECT_DIR$/static/img/home" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/static/img/home" />
@@ -178,7 +181,19 @@
       <workItem from="1764126421368" duration="12040000" />
       <workItem from="1764198663710" duration="2450000" />
       <workItem from="1764455097879" duration="9899000" />
-      <workItem from="1764465334791" duration="18955000" />
+      <workItem from="1764465334791" duration="19542000" />
+      <workItem from="1764885612215" duration="2266000" />
+      <workItem from="1765297893672" duration="25000" />
+      <workItem from="1765376572618" duration="31000" />
+      <workItem from="1768325556596" duration="1137000" />
+      <workItem from="1768926106946" duration="7559000" />
+      <workItem from="1770140416044" duration="3316000" />
+      <workItem from="1770745295384" duration="1979000" />
+      <workItem from="1771707436765" duration="666000" />
+      <workItem from="1771713059580" duration="11000" />
+      <workItem from="1772560403796" duration="2415000" />
+      <workItem from="1773155290577" duration="2160000" />
+      <workItem from="1773846242612" duration="925000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit - Homepage there, about page wip">
       <option name="closed" value="true" />
@@ -228,7 +243,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764469123076</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="stripe integration seems to work">
+      <option name="closed" value="true" />
+      <created>1764526359037</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1764526359037</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -251,6 +274,7 @@
     <MESSAGE value="past concerts and committee page up" />
     <MESSAGE value="requirements.txt" />
     <MESSAGE value="pre-stripe integration" />
-    <option name="LAST_COMMIT_MESSAGE" value="pre-stripe integration" />
+    <MESSAGE value="stripe integration seems to work" />
+    <option name="LAST_COMMIT_MESSAGE" value="stripe integration seems to work" />
   </component>
 </project>

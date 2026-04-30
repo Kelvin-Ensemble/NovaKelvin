@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Join Us - Kelvin Ensemble{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative h-96 flex items-center justify-center text-white overflow-hidden">
+  <!-- Blurred background image -->
+  <div
+    class="absolute inset-0 bg-cover bg-center bg-[url('{% static 'img/home/home_banner.jpg' %}')] filter blur-sm"
+  ></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/60"></div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-6 pt-40 text-center">
+        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight animate-fade-in">
+            Join Us
+        </h1>
+    </div>
+</section>
+
+<!-- Student run Section -->
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="grid gap-12 items-center"><div>
+                <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                    Auditions
+                </h2>
+                <p class="text-lg text-gray-600 mb-4 leading-relaxed">
+                    We’re really excited to see that you’re interested in applying for Kelvin.
+            At Kelvin we wish for the orchestra to be as satisfying and challenging as possible while
+            keeping things fair for all members.  To achieve this, the orchestra is auditioned new each
+            year, regardless if you are a new or previous member.
+                </p>
+                <p class="text-lg text-gray-600 mb-4 leading-relaxed">
+                    The vast majority if the members are not music students but from other disciplines the likes of the sciences, engineering and the humanities. We also have members from other universities in the Glasgow area like the University of Strathclyde and the Royal Conservatoire of Scotland (RCS)
+                </p>
+                <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                    Every year we run an audition cycle during the first few weeks of the academic year. For more information see below, and keep an eye on our socials!
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

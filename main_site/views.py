@@ -26,3 +26,6 @@ def pastconcerts(request):
     return render(request, 'past_concerts.html', {
         'past_concerts': past_concerts
     })
+
+def joinus(request):
+    return render(request, 'website/../join_us.html')

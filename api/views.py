@@ -88,34 +88,41 @@ class CreateCheckoutSessionView(APIView):
                 if quantity <= 0:
                     continue
 
-                ticket_type = get_object_or_404(
-                    ts_models.TicketType,
-                    pk=ticket_type_id,
-                )
-
-                # Validate availability
-                if quantity > ticket_type.qty_available:
-                    return Response(
-                        {
-                            "detail": f"Only {ticket_type.qty_available} {ticket_type.ticket_label} tickets available."
-                        },
-                        status=status.HTTP_400_BAD_REQUEST,
+                if (type(ticket_type_id) == int):
+                    ticket_type = get_object_or_404(
+                        ts_models.TicketType,
+                        pk=ticket_type_id,
                     )
 
-                # Use the price_id from your ticket type model
-                stripe_line_items.append({
-                    "price": ticket_type.price_id,
-                    "quantity": quantity,
-                })
+                    # Validate availability
+                    if quantity > ticket_type.qty_available:
+                        return Response(
+                            {
+                                "detail": f"Only {ticket_type.qty_available} {ticket_type.ticket_label} tickets available."
+                            },
+                            status=status.HTTP_400_BAD_REQUEST,
+                        )
 
-                # Store order item data for pending order
-                order_items_data.append({
-                    'ticket_type': ticket_type,
-                    'quantity': quantity,
-                    'price_per_ticket': ticket_type.price,
-                })
+                    # Use the price_id from your ticket type model
+                    stripe_line_items.append({
+                        "price": ticket_type.price_id,
+                        "quantity": quantity,
+                    })
 
-                total_amount += Decimal(str(ticket_type.price)) * quantity
+                    # Store order item data for pending order
+                    order_items_data.append({
+                        'ticket_type': ticket_type,
+                        'quantity': quantity,
+                        'price_per_ticket': ticket_type.price,
+                    })
+                    # print("Appended item: {}, qty: {}, price: {}".format(ticket_type, quantity, ticket_type.price))
+                else: # Assume if not an int, its a price_id
+                    stripe_line_items.append({
+                        "price": ticket_type_id,
+                        "quantity": quantity,
+                    })
+
+                total_amount += Decimal(str(ticket_type.price)) * quantity # THIS LINE
 
             if not stripe_line_items:
                 return Response(
