@@ -8,7 +8,6 @@
     --font-serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
     monospace;
-    --color-red-50: oklch(97.1% 0.013 17.38);
     --color-red-100: oklch(93.6% 0.032 17.717);
     --color-red-200: oklch(88.5% 0.062 18.334);
     --color-red-500: oklch(63.7% 0.237 25.331);
@@ -480,6 +479,9 @@
   }
   .w-80 {
     width: calc(var(--spacing) * 80);
+  }
+  .w-\[calc\(33\.333\%-0\.667rem\)\] {
+    width: calc(33.333% - 0.667rem);
   }
   .w-auto {
     width: auto;
@@ -1080,6 +1082,13 @@
       }
     }
   }
+  .hover\:bg-\[\#008888\] {
+    &:hover {
+      @media (hover: hover) {
+        background-color: #008888;
+      }
+    }
+  }
   .hover\:bg-gray-50 {
     &:hover {
       @media (hover: hover) {
@@ -1157,6 +1166,11 @@
   .sm\:inline {
     @media (width >= 40rem) {
       display: inline;
+    }
+  }
+  .sm\:w-\[calc\(20\%-0\.8rem\)\] {
+    @media (width >= 40rem) {
+      width: calc(20% - 0.8rem);
     }
   }
   .sm\:grid-cols-2 {
