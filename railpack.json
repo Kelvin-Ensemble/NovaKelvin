@@ -1,0 +1,4 @@
+{
+  "$schema": "https://schema.railpack.com",
+  "buildAptPackages": ["xmlsec1", "libxmlsec1-dev", "pkg-config", "libssl-dev"]
+}
