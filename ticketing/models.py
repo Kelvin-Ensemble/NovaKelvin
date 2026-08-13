@@ -138,6 +138,7 @@ class Ticket(models.Model):
     ticket_type = models.ForeignKey(
         TicketType, on_delete=models.CASCADE, null=True, default=None
     )
+    ticket_ID = models.CharField(blank=True, null=True, max_length=100)
     validity = models.BooleanField(
         help_text="If ticked, this ticket is valid.", default=True
     )

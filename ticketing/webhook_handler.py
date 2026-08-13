@@ -4,6 +4,7 @@ from django.utils import timezone
 from rest_framework import status
 from decimal import Decimal
 
+import secrets, string
 import stripe
 
 def handle_webhook(event):
@@ -68,6 +69,10 @@ def webhook_successful(event):
                 ticket.transaction_ID = order.stripe_session_id
                 ticket.for_concert = ticket_type.for_concert
                 ticket.change_log += f"[{timezone.now()}] - Ticket added to database."
+
+                while ticket.ticket_ID is None or ts_models.Ticket.objects.filter(ticket_ID=ticket.ticket_ID).exists():
+                    ticket.ticket_ID = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(16))
+
                 ticket.save()
 
                 ticket_type.recalculate_quantities_for_cluster(ticket_type)
