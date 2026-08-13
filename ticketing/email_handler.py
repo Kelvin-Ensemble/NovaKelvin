@@ -8,7 +8,7 @@ from datetime import datetime
 from decimal import Decimal
 import traceback
 
-from pdf_ticket_builder import build_ticket_pdf
+from ticketing.pdf_ticket_builder import build_ticket_pdf
 from NovaKelvin.settings import BASE_DIR
 from ticketing.models import Ticket
 from email.mime.image import MIMEImage
