@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 from collections import OrderedDict
 from datetime import datetime
 from decimal import Decimal
+import traceback
 
 from NovaKelvin.settings import BASE_DIR
 from ticketing.models import Ticket
@@ -91,24 +92,23 @@ def build_order_confirmation_context(order):
     }
 
 def send_confirmation_email(order):
-    print("Preparing email")
-    ctx = build_order_confirmation_context(order)
+    try:
+        ctx = build_order_confirmation_context(order)
+        text_body = render_to_string("emails/order_confirmation.txt", ctx)
+        html_body = render_to_string("emails/order_confirmation.html", ctx)
 
-    print("Templating")
+        message = EmailMultiAlternatives(
+            "KSO - Order Confirmation", text_body,
+            SENDER, [order.customer_email],
+        )
+        message.attach_alternative(html_body, "text/html")
+        message.attach(img)
 
-    text_body = render_to_string("emails/order_confirmation.txt", ctx)
-    html_body = render_to_string("emails/order_confirmation.html", ctx)
-
-    message = EmailMultiAlternatives(
-        f"Your tickets — {ctx['concert_title']}", text_body,
-        "tickets@kelvin-symphony.co.uk", [order.customer_email],
-    )
-    message.attach_alternative(html_body, "text/html")
-    message.attach(img)
-
-    print("Sending email")
-
-    message.send()
-
-    print("Message sent")
+        raw = base64.urlsafe_b64encode(message.message().as_bytes()).decode()
+        result = service.users().messages().send(userId="me", body={"raw": raw}).execute()
+        print("Sent, id:", result.get("id"))
+        return result
+    except Exception:
+        traceback.print_exc()   # full traceback instead of a swallowed one-liner
+        raise
 
