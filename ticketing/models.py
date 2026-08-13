@@ -139,6 +139,7 @@ class Ticket(models.Model):
         TicketType, on_delete=models.CASCADE, null=True, default=None
     )
     ticket_ID = models.CharField(blank=True, null=True, max_length=100)
+    checked_in_at = models.DateTimeField(null=True, blank=True, default=None)
     validity = models.BooleanField(
         help_text="If ticked, this ticket is valid.", default=True
     )
@@ -193,7 +194,7 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     confirmed_at = models.DateTimeField(null=True, blank=True)
 
-    tickets = models.ManyToManyField(Ticket, blank=True, null=True)
+    tickets = models.ManyToManyField(Ticket, blank=True)
 
     class Meta:
         ordering = ['-created_at']

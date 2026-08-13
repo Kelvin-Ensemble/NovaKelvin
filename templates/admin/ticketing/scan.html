@@ -1,0 +1,164 @@
+{% extends "admin/base_site.html" %}
+{% comment %}
+  Door-scanning page. Lives at /admin/ticketing/ticket/scan/
+  Save as: <your templates dir>/admin/ticketing/scan.html
+{% endcomment %}
+
+{% block extrahead %}{{ block.super }}
+<script src="https://unpkg.com/html5-qrcode" defer></script>
+<style>
+  #scanwrap { max-width: 760px; }
+  #reader { width: 100%; max-width: 480px; border-radius: 8px; overflow: hidden; background:#000; }
+  #result { margin-top: 18px; padding: 22px; border-radius: 10px; display:none; }
+  #result .big { font-size: 30px; font-weight: 800; letter-spacing: .5px; margin-bottom: 8px; }
+  #result .row { font-size: 17px; line-height: 1.5; }
+  #result.ok   { background:#dcfce7; border:1px solid #16a34a; color:#065f46; }
+  #result.warn { background:#fef9c3; border:1px solid #ca8a04; color:#713f12; }
+  #result.bad  { background:#fee2e2; border:1px solid #dc2626; color:#7f1d1d; }
+  #manual { padding:9px 10px; font-size:16px; width: 340px; }
+  #tally { margin-top: 16px; font-size: 14px; color:#374151; }
+  .scan-controls { margin: 14px 0; }
+  .hint { color:#6b7280; font-size: 13px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="scanwrap">
+  <p>Point the camera at a ticket QR, or focus the box below and scan with a handheld reader.</p>
+
+  <p>
+    <label for="concert"><strong>Door for:</strong></label>
+    <select id="concert">
+      <option value="">Any concert</option>
+      {% for c in concerts %}
+        <option value="{{ c.id }}">{{ c.concert_name }} — {{ c.concert_date }}</option>
+      {% endfor %}
+    </select>
+    <span class="hint">Optional — flags tickets scanned at the wrong event.</span>
+  </p>
+
+  <div id="reader"></div>
+  <div class="scan-controls">
+    <button type="button" id="startBtn" class="button">Start camera</button>
+    <button type="button" id="stopBtn" class="button" style="display:none;">Stop camera</button>
+  </div>
+
+  <p>
+    <label for="manual"><strong>Handheld / manual:</strong></label><br>
+    <input id="manual" autocomplete="off" placeholder="Scan or type reference, then Enter">
+    <span class="hint">Works over http; the camera needs https.</span>
+  </p>
+
+  <div id="result" aria-live="assertive">
+    <div class="big" id="rtitle"></div>
+    <div id="rdetail"></div>
+  </div>
+
+  <div id="tally">Admitted this session: <strong id="okcount">0</strong> &middot; Rejected: <strong id="badcount">0</strong></div>
+
+  {% csrf_token %}
+</div>
+
+<script>
+(function () {
+  const CSRF = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  const CHECK_URL = "{% url 'admin:ticketing_ticket_scan_check' %}";
+  const concertSel = document.getElementById('concert');
+  const result = document.getElementById('result');
+  const rtitle = document.getElementById('rtitle');
+  const rdetail = document.getElementById('rdetail');
+  const manual = document.getElementById('manual');
+  const okEl = document.getElementById('okcount');
+  const badEl = document.getElementById('badcount');
+  let okCount = 0, badCount = 0, lastCode = "", lastAt = 0;
+
+  const TITLES = { ok:'ADMIT', already_used:'ALREADY USED', invalid:'INVALID',
+                   void:'VOID', wrong_event:'WRONG EVENT', error:'ERROR' };
+  const CLASS  = { ok:'ok', already_used:'warn' };  // everything else => 'bad'
+
+  function beep(good) {
+    try {
+      const ac = new (window.AudioContext || window.webkitAudioContext)();
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.connect(g); g.connect(ac.destination);
+      o.type = 'sine'; o.frequency.value = good ? 880 : 200;
+      g.gain.setValueAtTime(0.2, ac.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.28);
+      o.start(); o.stop(ac.currentTime + 0.28);
+    } catch (e) {}
+  }
+
+  function show(data) {
+    const status = data.status || 'error';
+    result.className = CLASS[status] || 'bad';
+    result.style.display = 'block';
+    rtitle.textContent = TITLES[status] || status.toUpperCase();
+    const rows = [];
+    if (data.name)    rows.push(data.name);
+    if (data.type)    rows.push(data.type);
+    if (data.concert) rows.push(data.concert);
+    if (status === 'already_used' && data.checked_in_at) rows.push('First admitted at ' + data.checked_in_at);
+    if (data.message && status !== 'ok') rows.push(data.message);
+    rdetail.innerHTML = rows.map(r => '<div class="row">' + r + '</div>').join('');
+    if (status === 'ok') { okEl.textContent = ++okCount; }
+    else { badEl.textContent = ++badCount; }
+    beep(status === 'ok');
+  }
+
+  async function sendScan(code) {
+    const now = Date.now();
+    if (code === lastCode && now - lastAt < 3000) return;   // ignore repeat frames
+    lastCode = code; lastAt = now;
+    try {
+      const res = await fetch(CHECK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF },
+        body: JSON.stringify({ code: code, concert_id: concertSel.value || null }),
+      });
+      show(await res.json());
+    } catch (e) {
+      show({ status: 'error', message: 'Network error' });
+    }
+  }
+
+  // Handheld scanners act as keyboards and send Enter; manual typing works too.
+  manual.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const v = manual.value.trim();
+      manual.value = '';
+      if (v) sendScan(v);
+    }
+  });
+  manual.focus();
+
+  // Camera scanning (needs https or localhost).
+  let scanner = null;
+  const startBtn = document.getElementById('startBtn');
+  const stopBtn = document.getElementById('stopBtn');
+
+  startBtn.addEventListener('click', function () {
+    if (typeof Html5Qrcode === 'undefined') {
+      alert('Scanner library not loaded (offline?). Use the handheld/manual field instead.');
+      return;
+    }
+    scanner = new Html5Qrcode('reader');
+    scanner.start({ facingMode: 'environment' }, { fps: 10, qrbox: 250 },
+      (decoded) => sendScan(String(decoded).trim()),
+      () => {}   // per-frame decode misses are normal; ignore
+    ).then(() => {
+      startBtn.style.display = 'none';
+      stopBtn.style.display = '';
+    }).catch(err => {
+      alert('Could not start camera: ' + err + '\nUse the handheld/manual field instead.');
+    });
+  });
+
+  stopBtn.addEventListener('click', function () {
+    if (scanner) { scanner.stop().then(() => scanner.clear()).catch(() => {}); }
+    startBtn.style.display = '';
+    stopBtn.style.display = 'none';
+  });
+})();
+</script>
+{% endblock %}

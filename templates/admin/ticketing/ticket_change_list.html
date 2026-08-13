@@ -1,0 +1,14 @@
+{% extends "admin/change_list.html" %}
+{% comment %}
+  Optional. Adds a "Scan tickets" button above the ticket list.
+  Save as: <your templates dir>/admin/ticketing/ticket_change_list.html
+  If you don't want it, delete the `change_list_template = ...` line from TicketAdmin.
+{% endcomment %}
+{% block object-tools-items %}
+  <li>
+    <a href="{% url 'admin:ticketing_ticket_scan' %}" class="addlink" style="background:#008888;">
+      Scan tickets at the door
+    </a>
+  </li>
+  {{ block.super }}
+{% endblock %}
