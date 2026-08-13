@@ -1,4 +1,5 @@
 {% extends "admin/base_site.html" %}
+{% load static %}
 {% comment %}
   Door-scanning page. Lives at /admin/ticketing/ticket/scan/
   Save as: <your templates dir>/admin/ticketing/scan.html
@@ -62,6 +63,16 @@
 <script>
 (function () {
   const CSRF = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  const SOUNDS = {
+    accepted: new Audio("{% static 'sounds/scan_accepted.mp3' %}"),
+    denied:   new Audio("{% static 'sounds/scan_denied.mp3' %}"),
+    error:    new Audio("{% static 'sounds/scan_error.mp3' %}"),
+  };
+  function play(status) {
+    const key = status === 'ok' ? 'accepted' : (status === 'error' ? 'error' : 'denied');
+    SOUNDS[key].currentTime = 0;
+    SOUNDS[key].play().catch(() => {});
+  }
   const CHECK_URL = "{% url 'admin:ticketing_ticket_scan_check' %}";
   const concertSel = document.getElementById('concert');
   const result = document.getElementById('result');
@@ -102,7 +113,8 @@
     rdetail.innerHTML = rows.map(r => '<div class="row">' + r + '</div>').join('');
     if (status === 'ok') { okEl.textContent = ++okCount; }
     else { badEl.textContent = ++badCount; }
-    beep(status === 'ok');
+    {#beep(status === 'ok');#}
+    play(status);
   }
 
   async function sendScan(code) {
