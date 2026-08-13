@@ -91,7 +91,10 @@ def build_order_confirmation_context(order):
     }
 
 def send_confirmation_email(order):
+    print("Preparing email")
     ctx = build_order_confirmation_context(order)
+
+    print("Templating")
 
     text_body = render_to_string("emails/order_confirmation.txt", ctx)
     html_body = render_to_string("emails/order_confirmation.html", ctx)
@@ -105,4 +108,10 @@ def send_confirmation_email(order):
     message["To"] = order.customer_email
     message["Subject"] = "KSO - Order Confirmation"
     message.attach(img)
+
+    print("Sending email")
+
+    message.send()
+
+    print("Message sent")
 
