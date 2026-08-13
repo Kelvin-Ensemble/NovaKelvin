@@ -5,8 +5,26 @@ import { Card, CardHeader, CardTitle, CardContent } from './ui/Card';
 import { Button } from './ui/Button';
 import { Check, Download, Mail, Loader2 } from 'lucide-react';
 
-// Replace with your actual Stripe publishable key
-const stripePromise = loadStripe('pk_test_YOUR_PUBLISHABLE_KEY');
+// The publishable key is rendered onto the mount point by ticket_purchase.html.
+let stripePromise: ReturnType<typeof loadStripe> | null = null;
+
+const getStripe = () => {
+  if (!stripePromise) {
+    const key = document.getElementById('ticketing-root')?.dataset.stripePublishableKey;
+
+    if (!key) {
+      console.error('Missing data-stripe-publishable-key on #ticketing-root');
+      return null;
+    }
+
+    stripePromise = loadStripe(key);
+  }
+
+  return stripePromise;
+};
+
+const POLL_INTERVAL_MS = 1000;
+const MAX_POLL_ATTEMPTS = 30;
 
 interface StripeCheckoutProps {
   clientSecret: string;
@@ -35,61 +53,63 @@ export const StripeCheckout: React.FC<StripeCheckoutProps> = ({
 }) => {
   const [status, setStatus] = useState<'checkout' | 'confirming' | 'complete' | 'error'>('checkout');
   const [orderDetails, setOrderDetails] = useState<OrderStatus | null>(null);
-  const [pollCount, setPollCount] = useState(0);
 
-  // Poll for order confirmation
-  const pollOrderStatus = async () => {
-    try {
-      const response = await fetch(`/api/tickets/order-status/?session_id=${sessionId}`);
-      const data: OrderStatus = await response.json();
-
-      if (data.status === 'confirmed') {
-        setOrderDetails(data);
-        setStatus('complete');
-        return true; // Stop polling
-      } else if (data.status === 'failed') {
-        setStatus('error');
-        return true; // Stop polling
-      }
-
-      return false; // Continue polling
-    } catch (error) {
-      console.error('Error polling order status:', error);
-      return false; // Continue polling
-    }
-  };
-
-  // Start polling when status changes to 'confirming'
+  // Poll the order status once the payment lands, until the webhook confirms it.
   useEffect(() => {
     if (status !== 'confirming') return;
 
-    const interval = setInterval(async () => {
-      setPollCount(prev => prev + 1);
-      const shouldStop = await pollOrderStatus();
+    let cancelled = false;
+    let attempts = 0;
+    let timeout: ReturnType<typeof setTimeout> | undefined;
 
-      if (shouldStop) {
-        clearInterval(interval);
+    const poll = async () => {
+      attempts += 1;
+
+      try {
+        const response = await fetch(
+          `/api/tickets/order-status/?session_id=${encodeURIComponent(sessionId)}`
+        );
+        const data: OrderStatus = await response.json();
+
+        if (cancelled) return;
+
+        if (data.status === 'confirmed') {
+          setOrderDetails(data);
+          setStatus('complete');
+          return;
+        }
+
+        if (data.status === 'failed') {
+          setStatus('error');
+          return;
+        }
+      } catch (error) {
+        console.error('Error polling order status:', error);
       }
 
-      // Timeout after 30 seconds (30 polls at 1 second each)
-      if (pollCount >= 30) {
-        clearInterval(interval);
+      if (cancelled) return;
+
+      if (attempts >= MAX_POLL_ATTEMPTS) {
         setStatus('error');
+        return;
       }
-    }, 1000); // Poll every second
 
-    // Initial poll
-    pollOrderStatus();
+      timeout = setTimeout(poll, POLL_INTERVAL_MS);
+    };
 
-    return () => clearInterval(interval);
-  }, [status, pollCount, sessionId]);
+    poll();
+
+    return () => {
+      cancelled = true;
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [status, sessionId]);
 
   const options = {
     clientSecret,
     onComplete: () => {
       // Payment completed in Stripe, now wait for webhook
       setStatus('confirming');
-      setPollCount(0);
     },
   };
 
@@ -106,7 +126,7 @@ export const StripeCheckout: React.FC<StripeCheckoutProps> = ({
             <h3 className="text-2xl font-bold text-gray-900 mb-2">Order Confirmation Issue</h3>
             <p className="text-gray-600 mb-6">
               We're having trouble confirming your order. Your payment may have been processed.
-              Please check your email or contact <a href="mailto:webmaster@kelvin-ensemle.co.uk">webmaster@kelvin-ensemble.co.uk</a> with session ID:
+              Please check your email or contact <a href="mailto:webmaster@kelvin-symphony.co.uk">webmaster@kelvin-symphony.co.uk</a> with session ID:
               <span className="font-mono text-sm block mt-2">{sessionId.substring(0, 20)}...</span>
             </p>
             <Button onClick={onBack}>Back to Tickets</Button>
@@ -217,7 +237,7 @@ export const StripeCheckout: React.FC<StripeCheckoutProps> = ({
         </div>
 
         <div id="checkout">
-          <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
+          <EmbeddedCheckoutProvider stripe={getStripe()} options={options}>
             <EmbeddedCheckout />
           </EmbeddedCheckoutProvider>
         </div>

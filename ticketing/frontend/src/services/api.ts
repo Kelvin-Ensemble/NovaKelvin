@@ -3,7 +3,8 @@ import { Concert, TicketType } from '../types';
 const API_BASE = '/api/tickets';
 
 interface CheckoutLineItem {
-  ticket_type_id: number;
+  // A TicketType primary key, or a bare Stripe price ID for donations.
+  ticket_type_id: number | string;
   quantity: number;
 }
 

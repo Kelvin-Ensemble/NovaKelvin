@@ -76,9 +76,8 @@ class CreateCheckoutSessionView(APIView):
 
         try:
 
-            # Build Stripe line items and calculate total
+            # Build Stripe line items
             stripe_line_items = []
-            total_amount = Decimal('0.00')
             order_items_data = []
 
             for item in line_items_data:
@@ -122,32 +121,32 @@ class CreateCheckoutSessionView(APIView):
                         "quantity": quantity,
                     })
 
-                total_amount += Decimal(str(ticket_type.price)) * quantity # THIS LINE
-
             if not stripe_line_items:
                 return Response(
                     {"detail": "No valid line items provided."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            # Create Stripe checkout session
+            # Create Stripe checkout session.
+            # `embedded_page` replaced `embedded` in API version 2026-03-25.dahlia,
+            # which is the version pinned by stripe-python 15.x.
             checkout_session = stripe.checkout.Session.create(
-                ui_mode='embedded',
+                ui_mode='embedded_page',
                 line_items=stripe_line_items,
                 mode='payment',
                 redirect_on_completion='never',
                 automatic_tax={'enabled': True},
-                metadata={
-                },
             )
 
-            # Create pending order in database
+            # Create pending order in database. The totals come from the session
+            # Stripe just priced, so donations (which are passed as bare price IDs)
+            # are included; the webhook overwrites them with the final amounts.
             order = ts_models.Order.objects.create(
                 stripe_session_id=checkout_session.id,
                 status='pending',
                 customer_email='',  # Will be filled by webhook
-                total_amount=total_amount,
-                currency='GBP',
+                total_amount=Decimal(checkout_session.amount_total or 0) / 100,
+                currency=(checkout_session.currency or 'gbp').upper(),
             )
 
             # Create order items

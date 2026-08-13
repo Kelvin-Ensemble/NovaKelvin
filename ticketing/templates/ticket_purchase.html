@@ -16,7 +16,9 @@
 
 <section class="py-16 bg-gray-50">
     <!-- React will mount here -->
-    <div id="ticketing-root" class="max-w-6xl mx-auto px-6 lg:px-8"></div>
+    <div id="ticketing-root"
+         class="max-w-6xl mx-auto px-6 lg:px-8"
+         data-stripe-publishable-key="{{ stripe_publishable_key }}"></div>
 </section>
 {% endblock %}
 
