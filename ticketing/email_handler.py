@@ -104,9 +104,6 @@ def send_confirmation_email(order):
         "tickets@kelvin-symphony.co.uk", [order.customer_email],
     )
     message.attach_alternative(html_body, "text/html")
-    message["From"] = SENDER
-    message["To"] = order.customer_email
-    message["Subject"] = "KSO - Order Confirmation"
     message.attach(img)
 
     print("Sending email")
