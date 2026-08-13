@@ -8,7 +8,7 @@ from datetime import datetime
 from decimal import Decimal
 
 from NovaKelvin.settings import BASE_DIR
-from models import Ticket
+from ticketing.models import Ticket
 from email.mime.image import MIMEImage
 from django.core.mail import EmailMultiAlternatives
 
