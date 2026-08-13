@@ -8,6 +8,7 @@ from datetime import datetime
 from decimal import Decimal
 import traceback
 
+from pdf_ticket_builder import build_ticket_pdf
 from NovaKelvin.settings import BASE_DIR
 from ticketing.models import Ticket
 from email.mime.image import MIMEImage
@@ -103,6 +104,9 @@ def send_confirmation_email(order):
         )
         message.attach_alternative(html_body, "text/html")
         message.attach(img)
+        pdf_bytes = build_ticket_pdf(order)                   # bytes, nothing on disk
+        message.attach(f"tickets-order-{order.id}.pdf", pdf_bytes, "application/pdf")
+
 
         raw = base64.urlsafe_b64encode(message.message().as_bytes()).decode()
         result = service.users().messages().send(userId="me", body={"raw": raw}).execute()
