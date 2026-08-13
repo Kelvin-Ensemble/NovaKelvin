@@ -7,6 +7,9 @@ from decimal import Decimal
 import secrets, string
 import stripe
 
+from ticketing.email_handler import send_confirmation_email
+
+
 def handle_webhook(event):
     try:
         # Handle the checkout.session.completed event
@@ -74,8 +77,11 @@ def webhook_successful(event):
                     ticket.ticket_ID = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(16))
 
                 ticket.save()
+                order.tickets.add(ticket)
 
                 ticket_type.recalculate_quantities_for_cluster(ticket_type)
+
+        send_confirmation_email(order)
 
         # TODO: Send confirmation email here
         print(f"Order {order.id} confirmed for {order.customer_email}")

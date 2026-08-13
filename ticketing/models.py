@@ -193,6 +193,8 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     confirmed_at = models.DateTimeField(null=True, blank=True)
 
+    tickets = models.ManyToManyField(Ticket, blank=True, null=True)
+
     class Meta:
         ordering = ['-created_at']
 

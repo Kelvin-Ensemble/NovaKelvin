@@ -1,0 +1,248 @@
+{% comment %}
+=============================================================================
+  KELVIN SYMPHONY ORCHESTRA — Order Confirmation email
+  Django HTML template. Every style below is the INLINED equivalent of the
+  Tailwind classes used on the site (utility classes don't survive email
+  clients, so the compiled CSS values are inlined — same pixels).
+
+  Tailwind -> inlined value map used here:
+    font-sans .... ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif
+    kelvin ....... #008888     kelvin-dark ... #006666
+    gray-900 ..... #111827     gray-700 ...... #374151     gray-600 .... #4b5563
+    gray-400 ..... #9ca3af     gray-300 ...... #d1d5db     gray-200 .... #e5e7eb
+    gray-50 ...... #f9fafb
+    green-100 .... #dcfce7     green-600 ..... #16a34a
+    blue-50 ...... #eff6ff     blue-200 ...... #bfdbfe     blue-600 .... #2563eb
+    blue-900 ..... #1e3a8a     blue-800 ...... #1e40af     blue-700 .... #1d4ed8
+    text-xs 12/16  text-sm 14/20  text-base 16/24  text-lg 18/28
+    text-xl 20/28  text-2xl 24/32 text-3xl 30/36
+    font-medium 500  font-semibold 600  font-bold 700
+    rounded-md 6px  rounded-lg 8px  rounded-full 9999px
+    shadow-lg  0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1)
+
+  The tick is the exact Lucide `check` icon (M20 6 9 17l-5-5), shipped as a
+  CID-embedded PNG so it renders in Gmail/Outlook too. Attach it when sending:
+      from email.mime.image import MIMEImage
+      img = MIMEImage(open("check.png","rb").read())
+      img.add_header("Content-ID", "<check_icon>")
+      img.add_header("Content-Disposition", "inline")
+      msg.attach(img)
+
+  REQUIRED CONTEXT: customer_name, order_number, concert_title, concert_date,
+    concert_time, venue, items[{name,quantity,line_total}], subtotal, total
+  OPTIONAL: logo_url, donation, tickets_url, support_email, current_year,
+    check_icon_src (defaults to cid:check_icon)
+=============================================================================
+{% endcomment %}<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta name="color-scheme" content="light">
+  <meta name="supported-color-schemes" content="light">
+  <title>Order Confirmed — Kelvin Symphony Orchestra</title>
+  <!--[if mso]>
+  <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
+  <![endif]-->
+  <style>
+    body,table,td,a{ -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }
+    table,td{ mso-table-lspace:0pt; mso-table-rspace:0pt; }
+    img{ -ms-interpolation-mode:bicubic; border:0; height:auto; line-height:100%; outline:none; text-decoration:none; }
+    body{ margin:0; padding:0; width:100% !important; height:100% !important; }
+    a{ color:#008888; }
+    @media screen and (max-width:600px){
+      .container{ width:100% !important; }
+      .px{ padding-left:24px !important; padding-right:24px !important; }
+      .btn a{ display:block !important; }
+    }
+  </style>
+</head>
+<body style="margin:0; padding:0; background-color:#f9fafb; font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif;">
+
+  <!-- Preheader -->
+  <div style="display:none; max-height:0; overflow:hidden; mso-hide:all; font-size:1px; line-height:1px; color:#f9fafb; opacity:0;">
+    Order confirmed — your tickets for {{ concert_title }} are attached ({{ order_number }}).
+    &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
+  </div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f9fafb;">
+    <tr>
+      <td align="center" style="padding:24px 12px;">
+
+        <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px; box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1); border-radius:12px;">
+
+          <!-- ===== HEADER: kelvin -> kelvin-dark gradient (matches hero) ===== -->
+          <tr>
+            <td style="background-color:#007c7c; background-image:linear-gradient(135deg,#008888 0%,#006666 100%); border-radius:12px 12px 0 0; padding:36px 40px; text-align:center;">
+              {% if logo_url %}
+                <img src="{{ logo_url }}" width="180" alt="Kelvin Symphony Orchestra" style="display:inline-block; max-width:180px; height:auto;">
+              {% else %}
+                <div style="font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; color:#ffffff;">
+                  <div style="font-size:34px; font-weight:700; letter-spacing:-0.5px; line-height:1;">Kelvin</div>
+                  <div style="font-size:11px; font-weight:600; letter-spacing:4px; text-transform:uppercase; margin-top:6px; color:#cceaea;">Symphony Orchestra</div>
+                </div>
+              {% endif %}
+            </td>
+          </tr>
+
+          <!-- ===== SUCCESS (mirrors the checkout confirmation block) ===== -->
+          <tr>
+            <td class="px" style="background-color:#ffffff; padding:48px 40px 0 40px; text-align:center;">
+              <!-- w-20 h-20 bg-green-100 rounded-full + Lucide check (green-600) as CID png -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 16px auto;">
+                <tr>
+                  <td width="80" height="80" align="center" valign="middle" style="width:80px; height:80px; background-color:#dcfce7; border-radius:9999px;">
+                    <img src="{{ check_icon_src|default:'cid:check_icon' }}" width="48" height="48" alt="&#10003;" style="display:block; width:48px; height:48px;">
+                  </td>
+                </tr>
+              </table>
+              <!-- text-3xl font-bold text-gray-900 -->
+              <h1 style="margin:0 0 8px 0; font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:30px; line-height:36px; font-weight:700; color:#111827;">Order Confirmed!</h1>
+              <!-- text-lg text-gray-600 -->
+              <p style="margin:0; font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:18px; line-height:28px; color:#4b5563;">
+                {% if customer_name %}Thanks {{ customer_name }} — your{% else %}Your{% endif %} tickets are booked.
+              </p>
+            </td>
+          </tr>
+
+          <!-- ===== ATTACHMENT CALLOUT: bg-blue-50 border-blue-200 rounded-lg p-4 ===== -->
+          <tr>
+            <td class="px" style="background-color:#ffffff; padding:32px 40px 0 40px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#eff6ff; border:1px solid #bfdbfe; border-radius:8px;">
+                <tr>
+                  <td style="padding:16px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                      <tr>
+                        <!-- Lucide ticket icon, w-5 h-5 text-blue-600 -->
+                        <td width="32" valign="top" style="padding-top:2px;">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>
+                        </td>
+                        <td valign="top" style="font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;">
+                          <!-- text-sm text-blue-900 (bold) -->
+                          <p style="margin:0; font-size:14px; line-height:20px; color:#1e3a8a; font-weight:700;">Your tickets are attached</p>
+                          <!-- text-sm text-blue-800 -->
+                          <p style="margin:4px 0 0 0; font-size:14px; line-height:20px; color:#1e40af;">Look for the PDF on this email — bring it printed or on your phone.</p>
+                          <!-- text-xs text-blue-700 -->
+                          <p style="margin:8px 0 0 0; font-size:12px; line-height:16px; color:#1d4ed8;">We'll scan it at the door.</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ===== ORDER DETAILS: bg-gray-50 rounded-lg p-6 ===== -->
+          <tr>
+            <td class="px" style="background-color:#ffffff; padding:24px 40px 0 40px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f9fafb; border-radius:8px;">
+                <tr>
+                  <td style="padding:24px; font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;">
+
+                    <!-- h4 font-semibold text-gray-900 text-lg -->
+                    <div style="font-size:18px; line-height:28px; font-weight:600; color:#111827;">Order Details</div>
+
+                    <!-- Concert -->
+                    <div style="font-size:14px; font-weight:600; color:#111827; margin-top:16px;">Concert</div>
+                    <div style="font-size:14px; line-height:20px; color:#4b5563; margin-top:4px;">
+                      {{ concert_title }}<br>{{ concert_date }}{% if concert_time %} · {{ concert_time }}{% endif %}{% if venue %}<br>{{ venue }}{% endif %}
+                    </div>
+
+                    <!-- Tickets -->
+                    <div style="font-size:14px; font-weight:600; color:#111827; margin-top:16px;">Tickets</div>
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:4px;">
+                      {% for item in items %}
+                      <tr>
+                        <td style="padding:2px 0; font-size:14px; line-height:20px; color:#4b5563;">{{ item.name }} &times; {{ item.quantity }}</td>
+                        <td align="right" style="padding:2px 0; font-size:14px; line-height:20px; color:#4b5563; white-space:nowrap;">{{ item.line_total }}</td>
+                      </tr>
+                      {% endfor %}
+                    </table>
+
+                    <!-- border-t; Order ID (font-mono text-sm) -->
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:16px; border-top:1px solid #e5e7eb;">
+                      <tr>
+                        <td style="padding-top:16px; font-size:14px; line-height:20px; color:#374151;">Order ID:</td>
+                        <td align="right" style="padding-top:16px; font-size:14px; line-height:20px; color:#374151; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace;">{{ order_number }}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding-top:8px; font-size:14px; line-height:20px; color:#4b5563;">Subtotal</td>
+                        <td align="right" style="padding-top:8px; font-size:14px; line-height:20px; color:#374151; font-weight:500;">{{ subtotal }}</td>
+                      </tr>
+                      {% if donation %}
+                      <tr>
+                        <td style="padding-top:8px; font-size:14px; line-height:20px; color:#4b5563;">Donation</td>
+                        <td align="right" style="padding-top:8px; font-size:14px; line-height:20px; color:#374151; font-weight:500;">{{ donation }}</td>
+                      </tr>
+                      {% endif %}
+                    </table>
+
+                    <!-- Total row: text-lg font-bold, value text-[#008888] -->
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:12px; border-top:1px solid #e5e7eb;">
+                      <tr>
+                        <td style="padding-top:12px; font-size:18px; line-height:28px; font-weight:700; color:#111827;">Total</td>
+                        <td align="right" style="padding-top:12px; font-size:18px; line-height:28px; font-weight:700; color:#008888; white-space:nowrap;">{{ total }}</td>
+                      </tr>
+                    </table>
+
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ===== CTA: bg-[#008888] rounded-md font-semibold text-white w-full ===== -->
+          {% if tickets_url %}
+          <tr>
+            <td class="px" style="background-color:#ffffff; padding:24px 40px 0 40px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="btn">
+                <tr>
+                  <td align="center" bgcolor="#008888" style="border-radius:6px;">
+                    <!--[if mso]>
+                    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{ tickets_url }}" style="height:44px;v-text-anchor:middle;width:520px;" arcsize="14%" strokecolor="#008888" fillcolor="#008888">
+                    <w:anchorlock/><center style="color:#ffffff;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;font-weight:600;">View your tickets</center>
+                    </v:roundrect>
+                    <![endif]-->
+                    <!--[if !mso]><!-- -->
+                    <a href="{{ tickets_url }}" style="display:block; padding:11px 16px; font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:15px; font-weight:600; line-height:22px; color:#ffffff; text-align:center; text-decoration:none; border-radius:6px;">View your tickets</a>
+                    <!--<![endif]-->
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          {% endif %}
+
+          <!-- ===== HELP ===== -->
+          <tr>
+            <td class="px" style="background-color:#ffffff; padding:24px 40px 40px 40px; text-align:center;">
+              <p style="margin:0; font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:14px; line-height:20px; color:#4b5563;">
+                Questions? Email
+                <a href="mailto:{{ support_email|default:'info@kelvin-ensemble.co.uk' }}" style="color:#008888; text-decoration:none; font-weight:600;">{{ support_email|default:'info@kelvin-ensemble.co.uk' }}</a>
+              </p>
+            </td>
+          </tr>
+
+          <!-- ===== FOOTER: bg-gray-900, heading text-kelvin-light ===== -->
+          <tr>
+            <td style="background-color:#111827; border-radius:0 0 12px 12px; padding:32px 40px; text-align:center;">
+              <div style="font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; font-weight:600; color:#5ebdbd;">Kelvin Symphony Orchestra</div>
+              <div style="font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:13px; line-height:20px; color:#9ca3af; margin-top:10px;">
+                University of Glasgow · 14 University Gardens<br>Glasgow, United Kingdom
+              </div>
+              <div style="font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:12px; line-height:16px; color:#6b7280; margin-top:16px;">
+                © {{ current_year|default:2026 }} Kelvin Symphony Orchestra. A registered charity, entirely student-run.
+              </div>
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
