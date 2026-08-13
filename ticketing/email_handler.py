@@ -12,14 +12,14 @@ from ticketing.models import Ticket
 from email.mime.image import MIMEImage
 from django.core.mail import EmailMultiAlternatives
 
-img = MIMEImage(open(BASE_DIR + "templates/emails/check.png", "rb").read())
+img = MIMEImage(open(str(BASE_DIR) + "/templates/emails/check.png", "rb").read())
 img.add_header("Content-ID", "<check_icon>")
 img.add_header("Content-Disposition", "inline")
 
 SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
 SENDER = "tickets@kelvin-symphony.co.uk"   # the mailbox to send as
 
-info = json.loads(os.environ["GOOGLE_SERVICE_ACCOUNT_JSON"])
+info = json.loads(base64.b64decode(os.environ["GOOGLE_SERVICE_ACCOUNT_B64"]))
 creds = service_account.Credentials.from_service_account_info(
     info, scopes=SCOPES
 ).with_subject(SENDER)
