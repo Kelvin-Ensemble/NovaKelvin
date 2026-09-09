@@ -20,6 +20,8 @@
             }
         }
     </script>
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'img/favicon.png' %}">
     <style>
         .navbar-gradient {
             background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
@@ -68,15 +70,15 @@
                             <a href="{% url 'about' %}" class="block px-4 py-2 text-white hover:bg-kelvin hover:text-white transition-colors">Who are we?</a>
                             <a href="{% url 'committee' %}" class="block px-4 py-2 text-white hover:bg-kelvin hover:text-white transition-colors">The Committee</a>
                             <a href="{% url 'pastconcerts' %}" class="block px-4 py-2 text-white hover:bg-kelvin hover:text-white transition-colors">Past Concerts</a>
-                            <a href="" class="block px-4 py-2 text-white hover:bg-kelvin hover:text-white transition-colors">Join Us</a>
+                            <a href="{% url 'joinus' %}" class="block px-4 py-2 text-white hover:bg-kelvin hover:text-white transition-colors">Join Us</a>
                         </div>
                     </li>
 
-                    <li><a href="" class="text-white hover:text-kelvin-light transition-colors font-medium">Concerts</a></li>
-                    <li><a href="" class="text-white hover:text-kelvin-light transition-colors font-medium">Contact</a></li>
+                    <li><a href="" class="text-white hover:text-kelvin-light transition-colors font-medium">Upcoming (WIP)</a></li>
+                    <li><a onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})" class="text-white hover:text-kelvin-light transition-colors font-medium">Contact</a></li>
                     <li>
                         <a href="" class="bg-kelvin text-white px-6 py-2.5 rounded-full font-semibold hover:bg-kelvin-dark hover:shadow-lg hover:-translate-y-0.5 transition-all inline-block">
-                            Buy Tickets
+                            Buy Tickets (WIP)
                         </a>
                     </li>
                 </ul>
@@ -103,14 +105,14 @@
                         <a href="{% url 'about' %}" class="block text-gray-300 hover:text-kelvin-light transition-colors">Who are we?</a>
                         <a href="{% url 'committee' %}" class="block text-gray-300 hover:text-kelvin-light transition-colors">The Committee</a>
                         <a href="{% url 'pastconcerts' %}" class="block text-gray-300 hover:text-kelvin-light transition-colors">Past Concerts</a>
-                        <a href="" class="block text-gray-300 hover:text-kelvin-light transition-colors">Join Us</a>
+                        <a href="{% url 'joinus' %}" class="block text-gray-300 hover:text-kelvin-light transition-colors">Join Us</a>
                     </div>
                 </div>
 
-                <a href="" class="text-white hover:text-kelvin-light transition-colors text-lg font-medium">Concerts</a>
-                <a href="" class="text-white hover:text-kelvin-light transition-colors text-lg font-medium">Contact</a>
+                <a href="" class="text-white hover:text-kelvin-light transition-colors text-lg font-medium">Upcoming (WIP)</a>
+                <a href="#" onclick="window.scrollTo(0, document.body.scrollHeight)" class="text-white hover:text-kelvin-light transition-colors text-lg font-medium">Contact</a>
                 <a href="" class="bg-kelvin text-white px-6 py-3 rounded-full font-semibold hover:bg-kelvin-dark transition-colors inline-block text-center mt-4">
-                    Buy Tickets
+                    Buy Tickets (WIP)
                 </a>
             </div>
         </div>
@@ -132,17 +134,11 @@
                         An entirely student-run orchestra that performs two concerts a year within the university area, providing students with the chance to both learn and perform a wide variety of music in amazing venues.
                     </p>
                     <div class="flex gap-3">
-                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-kelvin flex items-center justify-center text-kelvin-light hover:text-white transition-all">
+                        <a href="https://www.facebook.com/kelvinensemble/" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-kelvin flex items-center justify-center text-kelvin-light hover:text-white transition-all">
                             <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-kelvin flex items-center justify-center text-kelvin-light hover:text-white transition-all">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-kelvin flex items-center justify-center text-kelvin-light hover:text-white transition-all">
+                        <a href="https://www.instagram.com/kelvinsymphony/" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-kelvin flex items-center justify-center text-kelvin-light hover:text-white transition-all">
                             <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-kelvin flex items-center justify-center text-kelvin-light hover:text-white transition-all">
-                            <i class="fab fa-youtube"></i>
                         </a>
                     </div>
                 </div>

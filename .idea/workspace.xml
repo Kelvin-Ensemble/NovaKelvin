@@ -5,17 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48ce7faf-ed2d-4f37-84ac-1fa1d42b874c" name="Changes" comment="fixed requirement.txt encoding">
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/NovaKelvin.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/NovaKelvin.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/favicon.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/frontend/src/components/StripeCheckout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/frontend/src/components/StripeCheckout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/frontend/src/services/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/frontend/src/services/api.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/static/ticketing/assets/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/static/ticketing/assets/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/templates/ticket_purchase.html" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/templates/ticket_purchase.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/webhook_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/webhook_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/header/logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/header/logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +44,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Kelvin-Ensemble/NovaKelvin&quot;,
-    &quot;accountId&quot;: &quot;b21a9eaa-01b8-49b2-bc01-2a31e98903b4&quot;
+    &quot;accountId&quot;: &quot;45dbfd43-f734-4d9e-b4e7-ddc655138db2&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -61,84 +55,56 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Django Server.NovaKelvin + TailwindCSS.executor": "Run",
-    "Django Server.NovaKelvin.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.pycharm.django.structure.promotion.once.per.project": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Shell Script.NovaKelvin + TailwindCSS.executor": "Run",
-    "Shell Script.TaillwindCSS Watcher.executor": "Run",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "django.template.preview.state": "SHOW_EDITOR_AND_PREVIEW",
-    "git-widget-placeholder": "staging",
-    "ignore.virus.scanning.warn.message": "true",
-    "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "C:/Users/yukis/PycharmProjects/NovaKelvin",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "to.speed.mode.migration.done": "true",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\PyCharm 2026.2.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Django Server.NovaKelvin + TailwindCSS.executor&quot;: &quot;Run&quot;,
+    &quot;Django Server.NovaKelvin.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.pycharm.django.structure.promotion.once.per.project&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Shell Script.NovaKelvin + TailwindCSS.executor&quot;: &quot;Run&quot;,
+    &quot;Shell Script.TaillwindCSS Watcher.executor&quot;: &quot;Run&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR_AND_PREVIEW&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;staging&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/YukiSuter/PycharmProjects/NovaKelvin/static/img&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\PyCharm 2026.2.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\YukiSuter\PycharmProjects\NovaKelvin\static\img" />
+      <recent name="C:\Users\YukiSuter\PycharmProjects\NovaKelvin\static\img\header" />
       <recent name="$PROJECT_DIR$/ticketing/templates" />
       <recent name="$PROJECT_DIR$/static/img/about" />
       <recent name="$PROJECT_DIR$/templates" />
-      <recent name="$PROJECT_DIR$/static/img/header" />
-      <recent name="$PROJECT_DIR$/static/img/home" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/static/img/home" />
       <recent name="$PROJECT_DIR$/templates" />
     </key>
   </component>
-  <component name="RunManager" selected="Django Server.NovaKelvin">
+  <component name="RunManager" selected="Compound.NovaKelvin + TailwindCSS">
     <configuration name="NovaKelvin + TailwindCSS" type="CompoundRunConfigurationType">
       <toRun name="NovaKelvin" type="Python.DjangoServer" />
       <toRun name="TaillwindCSS Watcher" type="ShConfigurationType" />
-      <method v="2" />
-    </configuration>
-    <configuration name="NovaKelvin" type="Python.DjangoServer" factoryName="Django server">
-      <module name="NovaKelvin" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-        <env name="DJANGO_SETTINGS_MODULE" value="NovaKelvin.settings" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="~\PycharmProjects\NovaKelvin\.venv" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="DEBUG_JUST_MY_CODE" value="true" />
-      <option name="RUN_TOOL" value="" />
-      <option name="launchJavascriptDebuger" value="false" />
-      <option name="port" value="8000" />
-      <option name="host" value="" />
-      <option name="additionalOptions" value="" />
-      <option name="browserUrl" value="" />
-      <option name="runTestServer" value="false" />
-      <option name="runNoReload" value="false" />
-      <option name="useCustomRunCommand" value="false" />
-      <option name="customRunCommand" value="" />
       <method v="2" />
     </configuration>
     <configuration name="TaillwindCSS Watcher" type="ShConfigurationType">
@@ -158,7 +124,6 @@
     </configuration>
     <list>
       <item itemvalue="Compound.NovaKelvin + TailwindCSS" />
-      <item itemvalue="Django Server.NovaKelvin" />
       <item itemvalue="Shell Script.TaillwindCSS Watcher" />
     </list>
   </component>
@@ -187,6 +152,8 @@
       <workItem from="1786553257730" duration="374000" />
       <workItem from="1786553642522" duration="6887000" />
       <workItem from="1786621644304" duration="1649000" />
+      <workItem from="1788783235779" duration="545000" />
+      <workItem from="1788978781494" duration="723000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit - Homepage there, about page wip">
       <option name="closed" value="true" />
