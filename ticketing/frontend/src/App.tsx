@@ -7,6 +7,7 @@ import { ConcertSelection } from './components/ConcertSelection';
 import { TicketSelection } from './components/TicketSelection';
 import { StripeCheckout } from './components/StripeCheckout';
 import { OrderSummary } from './components/OrderSummary';
+import { Donation } from './components/Donation';
 
 export default function TicketsPage() {
   const [step, setStep] = useState(1);
@@ -14,12 +15,22 @@ export default function TicketsPage() {
   const [selectedConcertId, setSelectedConcertId] = useState<number | null>(null);
   const [ticketTypes, setTicketTypes] = useState<TicketType[]>([]);
   const [ticketQuantities, setTicketQuantities] = useState<TicketQuantities>({});
+  const [donationAmount, setDonationAmount] = useState<number>(0);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [loadingConcerts, setLoadingConcerts] = useState(true);
   const [loadingTickets, setLoadingTickets] = useState(false);
   const [validating, setValidating] = useState(false);
   const [creatingCheckout, setCreatingCheckout] = useState(false);
+
+  const donationAmounts = [1, 3, 5, 10, 20];
+  const donationIDs = [
+    'price_1SwoSQBzBUhSO3Hm2IkluMX9',
+    'price_1SwoSbBzBUhSO3HmvkI7xpBp',
+    'price_1SwoShBzBUhSO3HmUhMi7JnE',
+    'price_1SwoSoBzBUhSO3HmrgjQqsPu',
+    'price_1SwoStBzBUhSO3HmQkZVtFqc'
+  ];
 
   // Fetch concerts on mount
   useEffect(() => {
@@ -119,24 +130,47 @@ export default function TicketsPage() {
     });
   };
 
-  const handleContinueToCheckout = async () => {
+  const handleContinueToDonation = async () => {
     const isValid = await validateAvailability();
     if (!isValid) return;
+    setStep(3);
+  };
 
+  const handleDonationContinue = (selectedDonation: number) => {
+    setDonationAmount(selectedDonation);
+    handleCreateCheckout(selectedDonation);
+  };
+
+  const handleSkipDonation = () => {
+    setDonationAmount(0);
+    handleCreateCheckout(0);
+  };
+
+  const handleCreateCheckout = async (selectedDonation: number) => {
     setCreatingCheckout(true);
     try {
-      // Create checkout session
+      // Create line items from ticket quantities
       const lineItems = Object.entries(ticketQuantities)
         .filter(([_, qty]) => qty > 0)
         .map(([ticketTypeId, quantity]) => ({
           ticket_type_id: parseInt(ticketTypeId),
           quantity
         }));
+      console.log(lineItems);
+      // Add donation if selected
+      if (selectedDonation > 0) {
+        const donationIndex = donationAmounts.indexOf(selectedDonation);
+        lineItems.push({
+          ticket_type_id: donationIDs[donationIndex],
+          quantity: 1
+        });
+      }
+      console.log(lineItems);
 
       const session = await api.createCheckoutSession(selectedConcertId!, lineItems);
       setClientSecret(session.client_secret);
       setSessionId(session.session_id);
-      setStep(3);
+      setStep(4);
     } catch (error) {
       console.error('Error creating checkout session:', error);
       alert('Failed to create checkout session. Please try again.');
@@ -151,6 +185,7 @@ export default function TicketsPage() {
     setSelectedConcertId(null);
     setTicketTypes([]);
     setTicketQuantities({});
+    setDonationAmount(0);
     setClientSecret(null);
     setSessionId(null);
   };
@@ -181,18 +216,28 @@ export default function TicketsPage() {
               ticketQuantities={ticketQuantities}
               onQuantityChange={handleTicketQuantityChange}
               onBack={() => setStep(1)}
-              onContinue={handleContinueToCheckout}
+              onContinue={handleContinueToDonation}
               loading={loadingTickets}
-              validating={validating || creatingCheckout}
+              validating={validating}
             />
           )}
 
-          {step === 3 && clientSecret && sessionId && (
+          {step === 3 && (
+            <Donation
+              onBack={() => setStep(2)}
+              onContinue={handleDonationContinue}
+              onSkip={handleSkipDonation}
+              donationAmounts={donationAmounts}
+              loading={creatingCheckout}
+            />
+          )}
+
+          {step === 4 && clientSecret && sessionId && (
             <StripeCheckout
               clientSecret={clientSecret}
               sessionId={sessionId}
               onBack={() => {
-                setStep(2);
+                setStep(3);
                 setClientSecret(null);
                 setSessionId(null);
               }}
@@ -208,6 +253,7 @@ export default function TicketsPage() {
             concert={selectedConcert}
             ticketTypes={ticketTypes}
             ticketQuantities={ticketQuantities}
+            donationAmount={donationAmount}
           />
         </div>
       </div>

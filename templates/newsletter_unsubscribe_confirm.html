@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Confirm Unsubscribe - Kelvin Symphony Orchestra{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative h-96 flex items-center justify-center text-white overflow-hidden">
+  <!-- Blurred background image -->
+  <div
+    class="absolute inset-0 bg-cover bg-center bg-[url('{% static 'img/home/home_banner.jpg' %}')] filter blur-sm"
+  ></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/60"></div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-6 pt-40 text-center">
+        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight animate-fade-in">
+            Unsubscribe
+        </h1>
+    </div>
+</section>
+
+<!-- Confirm Section -->
+<section class="py-20 bg-white">
+    <div class="max-w-2xl mx-auto px-6 lg:px-8 text-center">
+        {% if token %}
+        <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            Confirm <span class="text-kelvin">unsubscribe</span>
+        </h2>
+        <p id="confirmIntro" class="text-lg text-gray-600 mb-8 leading-relaxed">
+            Click below to stop receiving newsletter emails from the Kelvin Symphony Orchestra.
+            You can sign up again at any time.
+        </p>
+
+        <button id="confirmUnsubscribe" type="button" data-token="{{ token }}"
+                class="bg-kelvin text-white px-6 py-2.5 rounded-full font-semibold hover:bg-kelvin-dark hover:shadow-lg hover:-translate-y-0.5 transition-all disabled:opacity-60 disabled:hover:translate-y-0">
+            Unsubscribe me
+        </button>
+
+        <p id="confirmMessage" class="mt-6 text-lg hidden" role="status"></p>
+        {% else %}
+        <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            Link <span class="text-kelvin">incomplete</span>
+        </h2>
+        <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+            This unsubscribe link is missing its confirmation code. Please use the full link from your email,
+            or request a new one.
+        </p>
+        <a href="{% url 'newsletter_unsubscribe' %}" class="bg-kelvin text-white px-6 py-2.5 rounded-full font-semibold hover:bg-kelvin-dark hover:shadow-lg hover:-translate-y-0.5 transition-all inline-block">
+            Request a new link
+        </a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+{% if token %}
+<script>
+    const confirmUnsubscribe = document.getElementById('confirmUnsubscribe');
+    const confirmMessage = document.getElementById('confirmMessage');
+
+    function showConfirmMessage(text, ok) {
+        confirmMessage.textContent = text;
+        confirmMessage.classList.remove('hidden', 'text-kelvin', 'text-red-600');
+        confirmMessage.classList.add(ok ? 'text-kelvin' : 'text-red-600');
+    }
+
+    confirmUnsubscribe.addEventListener('click', async () => {
+        confirmUnsubscribe.disabled = true;
+        confirmUnsubscribe.textContent = 'Unsubscribing...';
+
+        try {
+            const response = await fetch("{% url 'newsletter-unsubscribe-confirm' %}", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: confirmUnsubscribe.dataset.token }),
+            });
+            const data = await response.json().catch(() => ({}));
+
+            if (response.ok) {
+                showConfirmMessage(data.detail, true);
+                confirmUnsubscribe.classList.add('hidden');
+                return;
+            } else if (response.status === 429) {
+                showConfirmMessage('Too many attempts. Please try again later.', false);
+            } else {
+                showConfirmMessage(data.detail || 'Sorry, something went wrong. Please try again later.', false);
+            }
+        } catch {
+            showConfirmMessage('Sorry, something went wrong. Please try again later.', false);
+        }
+
+        confirmUnsubscribe.disabled = false;
+        confirmUnsubscribe.textContent = 'Unsubscribe me';
+    });
+</script>
+{% endif %}
+{% endblock %}

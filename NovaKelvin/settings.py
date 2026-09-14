@@ -34,6 +34,7 @@ CSRF_TRUSTED_ORIGINS = ["https://kelvin-symphony.co.uk","http://127.0.0.1","http
 # Application definition
 
 INSTALLED_APPS = [
+    "unfold",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     "ticketing",
     'rest_framework',  # Add Django Rest Framework
     'api',  # Add your app
+    'django_saml2_auth',
 ]
 
 TAILWIND_APP_NAME = "theme"
@@ -59,7 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'NovaKelvin.middleware.UnderConstructionMiddleware',
+    # 'NovaKelvin.middleware.UnderConstructionMiddleware',
 ]
 
 ROOT_URLCONF = 'NovaKelvin.urls'
@@ -160,6 +162,9 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
+    # Number of proxies (Railway's edge) in front of Django. Throttling then trusts only the
+    # X-Forwarded-For entry the proxy adds, so clients can't dodge rate limits with a fake header.
+    'NUM_PROXIES': int(os.environ.get('DRF_NUM_PROXIES', '1')),
 }
 
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
@@ -176,3 +181,50 @@ if DEBUG:
     MIDDLEWARE += [
         "django_browser_reload.middleware.BrowserReloadMiddleware",
     ]
+
+SAML2_AUTH = {
+    # Paste the metadata URL from Google Admin here
+    # 'METADATA_AUTO_CONF_URL': 'https://accounts.google.com/o/saml2/idp?idpid=C03eq3bhc',
+    'METADATA_LOCAL_FILE_PATH': BASE_DIR / 'saml' / 'GoogleIDPMetadata.xml',
+    'ASSERTION_URL': 'https://staging.kelvin-symphony.co.uk',  # Your site's base URL
+    'ENTITY_ID': 'https://staging.kelvin-symphony.co.uk/sso/acs/',
+
+    # Google sends email as the NameID, so map accordingly
+    'ATTRIBUTES_MAP': {
+        'email': 'user.email',
+        'first_name': 'user.first_name',
+        'last_name': 'user.last_name',
+        'username': 'user.email',  # Use email as username
+    },
+
+    # Google doesn't send a token attribute, so disable this
+    'TOKEN_REQUIRED': False,
+
+    # Google signs responses but not always assertions individually
+    'WANT_ASSERTIONS_SIGNED': False,
+    'WANT_RESPONSE_SIGNED': True,
+    'AUTHN_REQUESTS_SIGNED': False,  # Google doesn't require signed requests
+    'LOGOUT_REQUESTS_SIGNED': False,
+
+    'DEFAULT_NEXT_URL': '/admin/',  # Where to send users after login
+    'CREATE_USER': True,
+    'NEW_USER_PROFILE': {
+        'USER_GROUPS': ['Committee'],
+        'ACTIVE_STATUS': True,
+        'STAFF_STATUS': True,
+        'SUPERUSER_STATUS': False,
+    },
+
+    'DEBUG': True,
+    'LOGGING': {
+        'version': 1,
+        'handlers': {'stdout': {'class': 'logging.StreamHandler', 'level': 'DEBUG'}},
+        'loggers': {'saml2': {'level': 'DEBUG'}},
+        'root': {'level': 'DEBUG', 'handlers': ['stdout']},
+    },
+}
+
+SESSION_COOKIE_SECURE = True  # must be True on HTTPS
+SESSION_COOKIE_SAMESITE = 'None'  # required for POST-back from Google
+CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = True

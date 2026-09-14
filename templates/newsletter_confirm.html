@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Confirm Subscription - Kelvin Symphony Orchestra{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative h-96 flex items-center justify-center text-white overflow-hidden">
+  <!-- Blurred background image -->
+  <div
+    class="absolute inset-0 bg-cover bg-center bg-[url('{% static 'img/home/home_banner.jpg' %}')] filter blur-sm"
+  ></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/60"></div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-6 pt-40 text-center">
+        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight animate-fade-in">
+            Newsletter
+        </h1>
+    </div>
+</section>
+
+<!-- Confirm Section -->
+<section class="py-20 bg-white">
+    <div class="max-w-2xl mx-auto px-6 lg:px-8 text-center">
+        {% if token %}
+        <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            Confirm <span class="text-kelvin">subscription</span>
+        </h2>
+        <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+            Click below to join our mailing list and hear about upcoming concerts, ticket releases,
+            auditions and other news from the Kelvin Symphony Orchestra.
+        </p>
+
+        <button id="confirmSubscribe" type="button" data-token="{{ token }}"
+                class="bg-kelvin text-white px-6 py-2.5 rounded-full font-semibold hover:bg-kelvin-dark hover:shadow-lg hover:-translate-y-0.5 transition-all disabled:opacity-60 disabled:hover:translate-y-0">
+            Confirm subscription
+        </button>
+
+        <p id="confirmMessage" class="mt-6 text-lg hidden" role="status"></p>
+        {% else %}
+        <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            Link <span class="text-kelvin">incomplete</span>
+        </h2>
+        <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+            This confirmation link is missing its code. Please use the full link from your email,
+            or sign up again.
+        </p>
+        <a href="{% url 'newsletter' %}" class="bg-kelvin text-white px-6 py-2.5 rounded-full font-semibold hover:bg-kelvin-dark hover:shadow-lg hover:-translate-y-0.5 transition-all inline-block">
+            Sign up again
+        </a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+{% if token %}
+<script>
+    const confirmSubscribe = document.getElementById('confirmSubscribe');
+    const confirmMessage = document.getElementById('confirmMessage');
+
+    function showConfirmMessage(text, ok) {
+        confirmMessage.textContent = text;
+        confirmMessage.classList.remove('hidden', 'text-kelvin', 'text-red-600');
+        confirmMessage.classList.add(ok ? 'text-kelvin' : 'text-red-600');
+    }
+
+    confirmSubscribe.addEventListener('click', async () => {
+        confirmSubscribe.disabled = true;
+        confirmSubscribe.textContent = 'Confirming...';
+
+        try {
+            const response = await fetch("{% url 'newsletter-subscribe-confirm' %}", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: confirmSubscribe.dataset.token }),
+            });
+            const data = await response.json().catch(() => ({}));
+
+            if (response.ok) {
+                showConfirmMessage(data.detail, true);
+                confirmSubscribe.classList.add('hidden');
+                return;
+            } else if (response.status === 429) {
+                showConfirmMessage('Too many attempts. Please try again later.', false);
+            } else {
+                showConfirmMessage(data.detail || 'Sorry, something went wrong. Please try again later.', false);
+            }
+        } catch {
+            showConfirmMessage('Sorry, something went wrong. Please try again later.', false);
+        }
+
+        confirmSubscribe.disabled = false;
+        confirmSubscribe.textContent = 'Confirm subscription';
+    });
+</script>
+{% endif %}
+{% endblock %}

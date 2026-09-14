@@ -1,0 +1,31 @@
+KELVIN SYMPHONY ORCHESTRA
+Order confirmed
+
+Thank you{% if customer_name %}, {{ customer_name }}{% endif %} — your tickets are booked.
+
+YOUR TICKETS ARE ATTACHED
+Look for the PDF attached to this email. Bring it printed or on your
+phone — we'll scan it at the door.
+{% if tickets_url %}
+Backup link (in case the attachment doesn't come through):
+{{ tickets_url }}
+{% endif %}
+------------------------------------------------------------
+CONCERT
+{{ concert_title }}
+{{ concert_date }}{% if concert_time %} · {{ concert_time }}{% endif %}{% if venue %}
+{{ venue }}{% endif %}
+
+TICKETS
+{% for item in items %}{{ item.name }} x {{ item.quantity }}    {{ item.line_total }}
+{% endfor %}
+Subtotal    {{ subtotal }}
+{% if donation %}Donation    {{ donation }}
+{% endif %}Order {{ order_number }}    Total {{ total }}
+------------------------------------------------------------
+
+Questions about your booking? Email {{ support_email|default:"info@kelvin-ensemble.co.uk" }}
+
+Kelvin Symphony Orchestra
+University of Glasgow · 14 University Gardens, Glasgow, United Kingdom
+© {{ current_year|default:2026 }} Kelvin Symphony Orchestra. A registered charity, entirely student-run.

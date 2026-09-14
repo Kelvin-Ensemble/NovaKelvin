@@ -3,12 +3,20 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.conf import settings
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+from django.core import signing
+from django.urls import reverse
+from urllib.parse import urlencode
+from rest_framework.throttling import AnonRateThrottle
 from decimal import Decimal
+import traceback
 import stripe
 
 from ticketing import models as ts_models
 from ticketing.webhook_handler import handle_webhook
 from .serializers import ConcertSerializer, TicketTypeSummarySerializer
+from . import newsletter
 
 # Initialize Stripe with your secret key
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -76,9 +84,8 @@ class CreateCheckoutSessionView(APIView):
 
         try:
 
-            # Build Stripe line items and calculate total
+            # Build Stripe line items
             stripe_line_items = []
-            total_amount = Decimal('0.00')
             order_items_data = []
 
             for item in line_items_data:
@@ -88,34 +95,39 @@ class CreateCheckoutSessionView(APIView):
                 if quantity <= 0:
                     continue
 
-                ticket_type = get_object_or_404(
-                    ts_models.TicketType,
-                    pk=ticket_type_id,
-                )
-
-                # Validate availability
-                if quantity > ticket_type.qty_available:
-                    return Response(
-                        {
-                            "detail": f"Only {ticket_type.qty_available} {ticket_type.ticket_label} tickets available."
-                        },
-                        status=status.HTTP_400_BAD_REQUEST,
+                if (type(ticket_type_id) == int):
+                    ticket_type = get_object_or_404(
+                        ts_models.TicketType,
+                        pk=ticket_type_id,
                     )
 
-                # Use the price_id from your ticket type model
-                stripe_line_items.append({
-                    "price": ticket_type.price_id,
-                    "quantity": quantity,
-                })
+                    # Validate availability
+                    if quantity > ticket_type.qty_available:
+                        return Response(
+                            {
+                                "detail": f"Only {ticket_type.qty_available} {ticket_type.ticket_label} tickets available."
+                            },
+                            status=status.HTTP_400_BAD_REQUEST,
+                        )
 
-                # Store order item data for pending order
-                order_items_data.append({
-                    'ticket_type': ticket_type,
-                    'quantity': quantity,
-                    'price_per_ticket': ticket_type.price,
-                })
+                    # Use the price_id from your ticket type model
+                    stripe_line_items.append({
+                        "price": ticket_type.price_id,
+                        "quantity": quantity,
+                    })
 
-                total_amount += Decimal(str(ticket_type.price)) * quantity
+                    # Store order item data for pending order
+                    order_items_data.append({
+                        'ticket_type': ticket_type,
+                        'quantity': quantity,
+                        'price_per_ticket': ticket_type.price,
+                    })
+                    # print("Appended item: {}, qty: {}, price: {}".format(ticket_type, quantity, ticket_type.price))
+                else: # Assume if not an int, its a price_id
+                    stripe_line_items.append({
+                        "price": ticket_type_id,
+                        "quantity": quantity,
+                    })
 
             if not stripe_line_items:
                 return Response(
@@ -123,24 +135,26 @@ class CreateCheckoutSessionView(APIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            # Create Stripe checkout session
+            # Create Stripe checkout session.
+            # `embedded_page` replaced `embedded` in API version 2026-03-25.dahlia,
+            # which is the version pinned by stripe-python 15.x.
             checkout_session = stripe.checkout.Session.create(
-                ui_mode='embedded',
+                ui_mode='embedded_page',
                 line_items=stripe_line_items,
                 mode='payment',
                 redirect_on_completion='never',
                 automatic_tax={'enabled': True},
-                metadata={
-                },
             )
 
-            # Create pending order in database
+            # Create pending order in database. The totals come from the session
+            # Stripe just priced, so donations (which are passed as bare price IDs)
+            # are included; the webhook overwrites them with the final amounts.
             order = ts_models.Order.objects.create(
                 stripe_session_id=checkout_session.id,
                 status='pending',
                 customer_email='',  # Will be filled by webhook
-                total_amount=total_amount,
-                currency='GBP',
+                total_amount=Decimal(checkout_session.amount_total or 0) / 100,
+                currency=(checkout_session.currency or 'gbp').upper(),
             )
 
             # Create order items
@@ -240,3 +254,217 @@ class OrderStatusView(APIView):
                 {"detail": "Order not found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
+
+
+class NewsletterSignupThrottle(AnonRateThrottle):
+    # Sends a confirmation email per request, so keep it from being hammered.
+    # Each throttle needs its own scope, otherwise they share one request history per IP.
+    scope = "newsletter_signup"
+    rate = "5/hour"
+
+
+class NewsletterSubscribeConfirmThrottle(AnonRateThrottle):
+    scope = "newsletter_subscribe_confirm"
+    rate = "20/hour"
+
+
+class NewsletterUnsubscribeRequestThrottle(AnonRateThrottle):
+    # Sends an email per request, so keep this tight
+    scope = "newsletter_unsubscribe_request"
+    rate = "5/hour"
+
+
+class NewsletterUnsubscribeConfirmThrottle(AnonRateThrottle):
+    scope = "newsletter_unsubscribe_confirm"
+    rate = "20/hour"
+
+
+def _confirmation_url(request, url_name, email, action):
+    """Absolute link to the confirm page `url_name`, carrying a signed token for `action`."""
+    url = request.build_absolute_uri(reverse(url_name))
+    if not settings.DEBUG:
+        # Behind the proxy Django sees plain http; links in emails should be https
+        url = url.replace("http://", "https://", 1)
+    return url + "?" + urlencode({"token": newsletter.make_token(email, action)})
+
+
+def _read_token_or_error(request, action):
+    """Return (email, None) for a valid token, or (None, error Response)."""
+    try:
+        return newsletter.read_token(str(request.data.get("token", "")), action), None
+    except signing.SignatureExpired:
+        return None, Response(
+            {"detail": "This link has expired. Please request a new one."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    except signing.BadSignature:
+        return None, Response(
+            {"detail": "This link is invalid. Please request a new one."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+
+class NewsletterSignupView(APIView):
+    """
+    POST /api/newsletter/subscribe/
+    Emails a link to confirm subscribing; nobody is added to the group until they click it.
+    The response is the same whether or not the address is already subscribed, so it can't
+    be used to check who is on the list.
+
+    Expected payload:
+    {
+        "email": "someone@example.com"
+    }
+    """
+    authentication_classes = []
+    permission_classes = []
+    throttle_classes = [NewsletterSignupThrottle]
+
+    SENT_MESSAGE = ("Almost done! Check your inbox for a link to confirm your subscription. "
+                    "If nothing arrives, you may already be on the list.")
+
+    def post(self, request):
+        # Honeypot: real users never see or fill this field
+        if request.data.get("website"):
+            return Response({"detail": self.SENT_MESSAGE})
+
+        email = str(request.data.get("email", "")).strip().lower()
+        try:
+            validate_email(email)
+        except ValidationError:
+            return Response(
+                {"detail": "Please enter a valid email address."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            try:
+                newsletter.membership_name(email)  # already subscribed: nothing to confirm
+            except newsletter.NotSubscribed:
+                newsletter.send_confirmation_email(
+                    email, "subscribe",
+                    _confirmation_url(request, "newsletter_confirm", email, "subscribe"),
+                )
+        except Exception:
+            traceback.print_exc()
+            return Response(
+                {"detail": "Sorry, something went wrong. Please try again later."},
+                status=status.HTTP_502_BAD_GATEWAY,
+            )
+
+        return Response({"detail": self.SENT_MESSAGE})
+
+
+class NewsletterSubscribeConfirmView(APIView):
+    """
+    POST /api/newsletter/subscribe/confirm/
+    Adds the address in a signed token (from the confirmation email) to the newsletter group.
+
+    Expected payload:
+    {
+        "token": "<token from the email link>"
+    }
+    """
+    authentication_classes = []
+    permission_classes = []
+    throttle_classes = [NewsletterSubscribeConfirmThrottle]
+
+    def post(self, request):
+        email, error = _read_token_or_error(request, "subscribe")
+        if error:
+            return error
+
+        try:
+            newsletter.subscribe(email)
+        except newsletter.AlreadySubscribed:
+            return Response({"detail": "You're already subscribed — thanks!"})
+        except Exception:
+            traceback.print_exc()
+            return Response(
+                {"detail": "Sorry, something went wrong. Please try again later."},
+                status=status.HTTP_502_BAD_GATEWAY,
+            )
+
+        return Response({"detail": "You're subscribed! Thanks for joining our mailing list."})
+
+
+class NewsletterUnsubscribeRequestView(APIView):
+    """
+    POST /api/newsletter/unsubscribe/
+    Emails a confirmation link to the address if it is subscribed.
+    The response is the same either way, so it can't be used to check who is on the list.
+
+    Expected payload:
+    {
+        "email": "someone@example.com"
+    }
+    """
+    authentication_classes = []
+    permission_classes = []
+    throttle_classes = [NewsletterUnsubscribeRequestThrottle]
+
+    SENT_MESSAGE = "If that address is subscribed, we've emailed it a link to confirm unsubscribing."
+
+    def post(self, request):
+        # Honeypot: real users never see or fill this field
+        if request.data.get("website"):
+            return Response({"detail": self.SENT_MESSAGE})
+
+        email = str(request.data.get("email", "")).strip().lower()
+        try:
+            validate_email(email)
+        except ValidationError:
+            return Response(
+                {"detail": "Please enter a valid email address."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            newsletter.membership_name(email)
+            newsletter.send_confirmation_email(
+                email, "unsubscribe",
+                _confirmation_url(request, "newsletter_unsubscribe_confirm", email, "unsubscribe"),
+            )
+        except newsletter.NotSubscribed:
+            pass
+        except Exception:
+            traceback.print_exc()
+            return Response(
+                {"detail": "Sorry, something went wrong. Please try again later."},
+                status=status.HTTP_502_BAD_GATEWAY,
+            )
+
+        return Response({"detail": self.SENT_MESSAGE})
+
+
+class NewsletterUnsubscribeConfirmView(APIView):
+    """
+    POST /api/newsletter/unsubscribe/confirm/
+    Removes the address in a signed token (from the confirmation email) from the newsletter group.
+
+    Expected payload:
+    {
+        "token": "<token from the email link>"
+    }
+    """
+    authentication_classes = []
+    permission_classes = []
+    throttle_classes = [NewsletterUnsubscribeConfirmThrottle]
+
+    def post(self, request):
+        email, error = _read_token_or_error(request, "unsubscribe")
+        if error:
+            return error
+
+        try:
+            newsletter.unsubscribe(email)
+        except newsletter.NotSubscribed:
+            return Response({"detail": "You're already unsubscribed."})
+        except Exception:
+            traceback.print_exc()
+            return Response(
+                {"detail": "Sorry, something went wrong. Please try again later."},
+                status=status.HTTP_502_BAD_GATEWAY,
+            )
+
+        return Response({"detail": "You've been unsubscribed. Sorry to see you go!"})

@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Unsubscribe - Kelvin Symphony Orchestra{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative h-96 flex items-center justify-center text-white overflow-hidden">
+  <!-- Blurred background image -->
+  <div
+    class="absolute inset-0 bg-cover bg-center bg-[url('{% static 'img/home/home_banner.jpg' %}')] filter blur-sm"
+  ></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/60"></div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-6 pt-40 text-center">
+        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight animate-fade-in">
+            Unsubscribe
+        </h1>
+    </div>
+</section>
+
+<!-- Unsubscribe Section -->
+<section class="py-20 bg-white">
+    <div class="max-w-2xl mx-auto px-6 lg:px-8 text-center">
+        <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            Leave our <span class="text-kelvin">mailing list</span>
+        </h2>
+        <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+            Enter the email address you subscribed with and we'll send you a link to confirm.
+            Once confirmed, you'll stop receiving newsletter emails from the Kelvin Symphony Orchestra.
+        </p>
+
+        <form id="unsubscribeForm" class="flex flex-col sm:flex-row gap-3 justify-center" novalidate>
+            <label for="unsubscribeEmail" class="sr-only">Email address</label>
+            <input id="unsubscribeEmail" name="email" type="email" required autocomplete="email"
+                   placeholder="you@example.com"
+                   class="flex-1 px-5 py-2.5 rounded-full border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-kelvin focus:border-kelvin">
+            <!-- Honeypot field, hidden from real users -->
+            <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
+            <button id="unsubscribeSubmit" type="submit"
+                    class="bg-kelvin text-white px-6 py-2.5 rounded-full font-semibold hover:bg-kelvin-dark hover:shadow-lg hover:-translate-y-0.5 transition-all disabled:opacity-60 disabled:hover:translate-y-0">
+                Send link
+            </button>
+        </form>
+
+        <p id="unsubscribeMessage" class="mt-6 text-lg hidden" role="status"></p>
+
+        <p class="mt-10 text-sm text-gray-500">
+            Changed your mind?
+            <a href="{% url 'newsletter' %}" class="text-kelvin hover:text-kelvin-dark underline">Back to the newsletter page</a>.
+        </p>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const unsubscribeForm = document.getElementById('unsubscribeForm');
+    const unsubscribeSubmit = document.getElementById('unsubscribeSubmit');
+    const unsubscribeMessage = document.getElementById('unsubscribeMessage');
+
+    function showUnsubscribeMessage(text, ok) {
+        unsubscribeMessage.textContent = text;
+        unsubscribeMessage.classList.remove('hidden', 'text-kelvin', 'text-red-600');
+        unsubscribeMessage.classList.add(ok ? 'text-kelvin' : 'text-red-600');
+    }
+
+    unsubscribeForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const email = unsubscribeForm.email.value.trim();
+        if (!unsubscribeForm.email.checkValidity() || !email) {
+            showUnsubscribeMessage('Please enter a valid email address.', false);
+            return;
+        }
+
+        unsubscribeSubmit.disabled = true;
+        unsubscribeSubmit.textContent = 'Sending...';
+
+        try {
+            const response = await fetch("{% url 'newsletter-unsubscribe' %}", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, website: unsubscribeForm.website.value }),
+            });
+            const data = await response.json().catch(() => ({}));
+
+            if (response.ok) {
+                showUnsubscribeMessage(data.detail, true);
+                unsubscribeForm.reset();
+            } else if (response.status === 429) {
+                showUnsubscribeMessage('Too many attempts. Please try again later.', false);
+            } else {
+                showUnsubscribeMessage(data.detail || 'Sorry, something went wrong. Please try again later.', false);
+            }
+        } catch {
+            showUnsubscribeMessage('Sorry, something went wrong. Please try again later.', false);
+        } finally {
+            unsubscribeSubmit.disabled = false;
+            unsubscribeSubmit.textContent = 'Send link';
+        }
+    });
+</script>
+{% endblock %}
