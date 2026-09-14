@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Newsletter - Kelvin Symphony Orchestra{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative h-96 flex items-center justify-center text-white overflow-hidden">
+  <!-- Blurred background image -->
+  <div
+    class="absolute inset-0 bg-cover bg-center bg-[url('{% static 'img/home/home_banner.jpg' %}')] filter blur-sm"
+  ></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/60"></div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-6 pt-40 text-center">
+        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight animate-fade-in">
+            Newsletter
+        </h1>
+    </div>
+</section>
+
+<!-- Sign up Section -->
+<section class="py-20 bg-white">
+    <div class="max-w-2xl mx-auto px-6 lg:px-8 text-center">
+        <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            Stay <span class="text-kelvin">updated</span>
+        </h2>
+        <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+            Join our mailing list to hear about upcoming concerts, ticket releases, auditions and other news
+            from the Kelvin Symphony Orchestra. We'll only email you occasionally, and every email includes
+            a link to unsubscribe at any time. After signing up, we'll email you a link to confirm your subscription.
+        </p>
+
+        <form id="newsletterForm" class="flex flex-col sm:flex-row gap-3 justify-center" novalidate>
+            <label for="newsletterEmail" class="sr-only">Email address</label>
+            <input id="newsletterEmail" name="email" type="email" required autocomplete="email"
+                   placeholder="you@example.com"
+                   class="flex-1 px-5 py-2.5 rounded-full border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-kelvin focus:border-kelvin">
+            <!-- Honeypot field, hidden from real users -->
+            <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
+            <button id="newsletterSubmit" type="submit"
+                    class="bg-kelvin text-white px-6 py-2.5 rounded-full font-semibold hover:bg-kelvin-dark hover:shadow-lg hover:-translate-y-0.5 transition-all disabled:opacity-60 disabled:hover:translate-y-0">
+                Subscribe
+            </button>
+        </form>
+
+        <p id="newsletterMessage" class="mt-6 text-lg hidden" role="status"></p>
+
+        <p class="mt-10 text-sm text-gray-500">
+            Already subscribed and want to leave?
+            <a href="{% url 'newsletter_unsubscribe' %}" class="text-kelvin hover:text-kelvin-dark underline">Unsubscribe here</a>.
+        </p>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const newsletterForm = document.getElementById('newsletterForm');
+    const newsletterSubmit = document.getElementById('newsletterSubmit');
+    const newsletterMessage = document.getElementById('newsletterMessage');
+
+    function showNewsletterMessage(text, ok) {
+        newsletterMessage.textContent = text;
+        newsletterMessage.classList.remove('hidden', 'text-kelvin', 'text-red-600');
+        newsletterMessage.classList.add(ok ? 'text-kelvin' : 'text-red-600');
+    }
+
+    newsletterForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const email = newsletterForm.email.value.trim();
+        if (!newsletterForm.email.checkValidity() || !email) {
+            showNewsletterMessage('Please enter a valid email address.', false);
+            return;
+        }
+
+        newsletterSubmit.disabled = true;
+        newsletterSubmit.textContent = 'Subscribing...';
+
+        try {
+            const response = await fetch("{% url 'newsletter-subscribe' %}", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, website: newsletterForm.website.value }),
+            });
+            const data = await response.json().catch(() => ({}));
+
+            if (response.ok) {
+                showNewsletterMessage(data.detail || 'Thanks for subscribing!', true);
+                newsletterForm.reset();
+            } else if (response.status === 429) {
+                showNewsletterMessage('Too many attempts. Please try again later.', false);
+            } else {
+                showNewsletterMessage(data.detail || 'Sorry, something went wrong. Please try again later.', false);
+            }
+        } catch {
+            showNewsletterMessage('Sorry, something went wrong. Please try again later.', false);
+        } finally {
+            newsletterSubmit.disabled = false;
+            newsletterSubmit.textContent = 'Subscribe';
+        }
+    });
+</script>
+{% endblock %}
