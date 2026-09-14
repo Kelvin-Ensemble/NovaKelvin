@@ -162,6 +162,9 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
+    # Number of proxies (Railway's edge) in front of Django. Throttling then trusts only the
+    # X-Forwarded-For entry the proxy adds, so clients can't dodge rate limits with a fake header.
+    'NUM_PROXIES': int(os.environ.get('DRF_NUM_PROXIES', '1')),
 }
 
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')

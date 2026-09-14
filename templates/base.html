@@ -131,7 +131,7 @@
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-kelvin-light">Kelvin Symphony Orchestra</h3>
                     <p class="text-gray-400 leading-relaxed mb-4">
-                        An entirely student-run orchestra that performs two concerts a year within the university area, providing students with the chance to both learn and perform a wide variety of music in amazing venues.
+                        An entirely student-run orchestra that performs four concerts a year within the university area, providing students with the chance to both learn and perform a wide variety of music in amazing venues.
                     </p>
                     <div class="flex gap-3">
                         <a href="https://www.facebook.com/kelvinensemble/" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-kelvin flex items-center justify-center text-kelvin-light hover:text-white transition-all">
@@ -139,6 +139,9 @@
                         </a>
                         <a href="https://www.instagram.com/kelvinsymphony/" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-kelvin flex items-center justify-center text-kelvin-light hover:text-white transition-all">
                             <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.youtube.com/channel/UCr2-_bhHmy1GCkXIBB33q0A" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-kelvin flex items-center justify-center text-kelvin-light hover:text-white transition-all">
+                            <i class="fab fa-youtube"></i>
                         </a>
                     </div>
                 </div>
@@ -149,8 +152,8 @@
                     <ul class="space-y-2">
                         <li><a href="{% url 'home' %}" class="text-gray-400 hover:text-kelvin-light transition-colors">Home</a></li>
                         <li><a href="{% url 'about' %}" class="text-gray-400 hover:text-kelvin-light transition-colors">About Us</a></li>
-                        <li><a href="" class="text-gray-400 hover:text-kelvin-light transition-colors">Concerts</a></li>
-                        <li><a href="" class="text-gray-400 hover:text-kelvin-light transition-colors">Buy Tickets</a></li>
+                        <li><a href="" class="text-gray-400 hover:text-kelvin-light transition-colors">Upcoming (WIP)</a></li>
+                        <li><a href="" class="text-gray-400 hover:text-kelvin-light transition-colors">Buy Tickets (WIP)</a></li>
                     </ul>
                 </div>
 
@@ -164,7 +167,7 @@
                         </li>
                         <li class="flex items-center gap-3">
                             <i class="fas fa-envelope text-kelvin"></i>
-                            <a href="mailto:info@kelvin-ensemble.co.uk" class="hover:text-kelvin-light transition-colors">info@kelvin-ensemble.co.uk</a>
+                            <a href="mailto:info@kelvin-symphony.co.uk" class="hover:text-kelvin-light transition-colors">info@kelvin-symphony.co.uk</a>
                         </li>
                     </ul>
                 </div>
@@ -173,7 +176,7 @@
                 <div>
                     <h4 class="text-lg font-semibold mb-4 text-kelvin-light">Stay Updated</h4>
                     <p class="text-gray-400 mb-4">Subscribe to receive updates about our latest performances and news.</p>
-                    <a href="#" class="bg-kelvin text-white px-6 py-2.5 rounded-full font-semibold hover:bg-kelvin-dark transition-colors inline-block">
+                    <a href="{% url 'newsletter' %}" class="bg-kelvin text-white px-6 py-2.5 rounded-full font-semibold hover:bg-kelvin-dark transition-colors inline-block">
                         Subscribe
                     </a>
                 </div>

@@ -42,6 +42,10 @@ urlpatterns = [
     path('about/committee', ms_views.committee, name='committee'),
     path('about/past-concerts', ms_views.pastconcerts, name='pastconcerts'),
     path('about/join', ms_views.joinus, name='joinus'),
+    path('newsletter', ms_views.newsletter, name='newsletter'),
+    path('newsletter/confirm', ms_views.newsletter_confirm, name='newsletter_confirm'),
+    path('newsletter/unsubscribe', ms_views.newsletter_unsubscribe, name='newsletter_unsubscribe'),
+    path('newsletter/unsubscribe/confirm', ms_views.newsletter_unsubscribe_confirm, name='newsletter_unsubscribe_confirm'),
 
     path("tickets/", ts_views.ticketing_page, name="ticketing_home"),
     path("tickets/success", ts_views.ticketing_success, name="ticketing_success"),

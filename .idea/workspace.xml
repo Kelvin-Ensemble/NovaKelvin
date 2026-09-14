@@ -4,12 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48ce7faf-ed2d-4f37-84ac-1fa1d42b874c" name="Changes" comment="fixed requirement.txt encoding">
-      <change afterPath="$PROJECT_DIR$/static/img/favicon.png" afterDir="false" />
+    <list default="true" id="48ce7faf-ed2d-4f37-84ac-1fa1d42b874c" name="Changes" comment="mostly updated links">
+      <change beforePath="$PROJECT_DIR$/.idea/claudeCodeTabState.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/claudeCodeTabState.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/header/logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/header/logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NovaKelvin/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/NovaKelvin/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NovaKelvin/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/NovaKelvin/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_site/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_site/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/about.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/about.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/committee.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/committee.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/join_us.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/join_us.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/past_concerts.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/past_concerts.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/theme/static/css/dist/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/theme/static/css/dist/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/email_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/email_handler.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,10 +111,38 @@
       <recent name="$PROJECT_DIR$/templates" />
     </key>
   </component>
-  <component name="RunManager" selected="Compound.NovaKelvin + TailwindCSS">
+  <component name="RunManager" selected="Django Server.NovaKelvin">
     <configuration name="NovaKelvin + TailwindCSS" type="CompoundRunConfigurationType">
-      <toRun name="NovaKelvin" type="Python.DjangoServer" />
       <toRun name="TaillwindCSS Watcher" type="ShConfigurationType" />
+      <method v="2" />
+    </configuration>
+    <configuration name="NovaKelvin" type="Python.DjangoServer" factoryName="Django server">
+      <module name="NovaKelvin" />
+      <option name="ENV_FILES" value="$PROJECT_DIR$/.env" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name=" DEBUG" value="True" />
+        <env name="DJANGO_SETTINGS_MODULE" value="NovaKelvin.settings" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="~\PycharmProjects\NovaKelvin\.venv" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="DEBUG_JUST_MY_CODE" value="false" />
+      <option name="RUN_TOOL" value="" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
       <method v="2" />
     </configuration>
     <configuration name="TaillwindCSS Watcher" type="ShConfigurationType">
@@ -124,6 +162,7 @@
     </configuration>
     <list>
       <item itemvalue="Compound.NovaKelvin + TailwindCSS" />
+      <item itemvalue="Django Server.NovaKelvin" />
       <item itemvalue="Shell Script.TaillwindCSS Watcher" />
     </list>
   </component>
@@ -153,7 +192,8 @@
       <workItem from="1786553642522" duration="6887000" />
       <workItem from="1786621644304" duration="1649000" />
       <workItem from="1788783235779" duration="545000" />
-      <workItem from="1788978781494" duration="723000" />
+      <workItem from="1788978781494" duration="11501000" />
+      <workItem from="1789384731399" duration="5824000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit - Homepage there, about page wip">
       <option name="closed" value="true" />
@@ -219,7 +259,15 @@
       <option name="project" value="LOCAL" />
       <updated>1777305080027</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="mostly updated links">
+      <option name="closed" value="true" />
+      <created>1788979551374</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1788979551375</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -244,6 +292,7 @@
     <MESSAGE value="pre-stripe integration" />
     <MESSAGE value="an attempt at getting it to deploy on railway" />
     <MESSAGE value="fixed requirement.txt encoding" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed requirement.txt encoding" />
+    <MESSAGE value="mostly updated links" />
+    <option name="LAST_COMMIT_MESSAGE" value="mostly updated links" />
   </component>
 </project>

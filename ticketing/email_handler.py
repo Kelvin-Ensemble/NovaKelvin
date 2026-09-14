@@ -19,12 +19,13 @@ img.add_header("Content-ID", "<check_icon>")
 img.add_header("Content-Disposition", "inline")
 
 SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
-SENDER = "tickets@kelvin-symphony.co.uk"   # the mailbox to send as
+SENDER_ADDRESS = "tickets@kelvin-symphony.co.uk"   # the mailbox to send as
+SENDER = f"Kelvin Symphony <{SENDER_ADDRESS}>"                  # From header; the display name recipients see
 
 info = json.loads(base64.b64decode(os.environ["GOOGLE_SERVICE_ACCOUNT_B64"]))
 creds = service_account.Credentials.from_service_account_info(
     info, scopes=SCOPES
-).with_subject(SENDER)
+).with_subject(SENDER_ADDRESS)
 
 service = build("gmail", "v1", credentials=creds)
 
@@ -99,7 +100,7 @@ def send_confirmation_email(order):
         html_body = render_to_string("emails/order_confirmation.html", ctx)
 
         message = EmailMultiAlternatives(
-            "KSO - Order Confirmation", text_body,
+            "Your Tickets", text_body,
             SENDER, [order.customer_email],
         )
         message.attach_alternative(html_body, "text/html")
