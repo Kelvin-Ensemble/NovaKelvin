@@ -182,12 +182,16 @@ if DEBUG:
         "django_browser_reload.middleware.BrowserReloadMiddleware",
     ]
 
+# Per-deployment SAML addresses; both must match the Google SAML app (ACS URL and Entity ID)
+SAML_ASSERTION_URL = os.environ.get('SAML_ASSERTION_URL', 'https://staging.kelvin-symphony.co.uk').rstrip('/')
+SAML_ENTITY_ID = os.environ.get('SAML_ENTITY_ID', f'{SAML_ASSERTION_URL}/sso/acs/')
+
 SAML2_AUTH = {
     # Paste the metadata URL from Google Admin here
     # 'METADATA_AUTO_CONF_URL': 'https://accounts.google.com/o/saml2/idp?idpid=C03eq3bhc',
     'METADATA_LOCAL_FILE_PATH': BASE_DIR / 'saml' / 'GoogleIDPMetadata.xml',
-    'ASSERTION_URL': 'https://staging.kelvin-symphony.co.uk',  # Your site's base URL
-    'ENTITY_ID': 'https://staging.kelvin-symphony.co.uk/sso/acs/',
+    'ASSERTION_URL': SAML_ASSERTION_URL,  # Your site's base URL
+    'ENTITY_ID': SAML_ENTITY_ID,
 
     # Google sends email as the NameID, so map accordingly
     'ATTRIBUTES_MAP': {
