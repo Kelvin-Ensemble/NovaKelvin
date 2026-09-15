@@ -63,12 +63,19 @@ def subscribe(email):
         raise
 
 
+def _is_not_member_error(e):
+    # For emails that have never been a member (seen so far with external/institutional domains
+    # like *.ac.uk), the Directory API sometimes answers 400 "Missing required field: memberKey"
+    # instead of the expected 404. Same underlying case, just a wrong/misleading error shape.
+    return e.resp.status == 404 or (e.resp.status == 400 and b"memberKey" in e.content)
+
+
 def membership_name(email):
     """Confirm `email` is a member of the group, or raise NotSubscribed."""
     try:
         return _directory_service().members().get(groupKey=GROUP_EMAIL, memberKey=email).execute()["email"]
     except HttpError as e:
-        if e.resp.status == 404:
+        if _is_not_member_error(e):
             raise NotSubscribed(email)
         raise
 
@@ -78,7 +85,7 @@ def unsubscribe(email):
     try:
         _directory_service().members().delete(groupKey=GROUP_EMAIL, memberKey=email).execute()
     except HttpError as e:
-        if e.resp.status == 404:
+        if _is_not_member_error(e):
             raise NotSubscribed(email)
         raise
 
