@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib import admin
-from unfold.admin import ModelAdmin  # add this
+from unfold.admin import ModelAdmin, TabularInline
 from django.urls import reverse
 from django.utils.html import format_html_join
 
@@ -15,7 +15,7 @@ from django.utils import timezone
 from ticketing.models import Ticket, Concert
 
 
-from main_site.models import CommitteeMember, PastConcert
+from main_site.models import CommitteeMember, PastConcert, AuditionSection, AuditionDate, AuditionExcerpt
 from ticketing.models import Concert, TicketType, Ticket, Order
 
 # from import_export.admin import ExportMixin
@@ -185,3 +185,21 @@ class ticketAdmin(ModelAdmin):
 admin.site.register(CommitteeMember)
 admin.site.register(PastConcert)
 admin.site.register(Order)
+
+
+class AuditionDateInline(TabularInline):
+    model = AuditionDate
+    extra = 1
+
+
+class AuditionExcerptInline(TabularInline):
+    model = AuditionExcerpt
+    extra = 1
+
+
+@admin.register(AuditionSection)
+class AuditionSectionAdmin(ModelAdmin):
+    list_display = ("name", "is_published", "order")
+    list_editable = ("is_published", "order")
+    fields = ("name", "description", "form_url", "booking_url", "order", "is_published")
+    inlines = [AuditionDateInline, AuditionExcerptInline]
