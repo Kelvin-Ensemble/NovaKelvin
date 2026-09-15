@@ -12,9 +12,12 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-# Uses the Cloud Identity Groups API rather than the Admin SDK: group owners/managers
-# can add members through it, so the impersonated account doesn't need an admin role.
-SCOPES = ["https://www.googleapis.com/auth/cloud-identity.groups"]
+# Uses the (legacy) Admin SDK Directory API rather than Cloud Identity Groups: Cloud Identity's
+# memberships.create only accepts emails that already resolve to a Google identity, which rules
+# out most real subscribers (work/uni addresses, custom domains). The Directory API's Members
+# resource accepts any email, like a classic mailing list — but it requires the impersonated
+# account to hold the Workspace "Groups" admin privilege, not just group-owner status.
+SCOPES = ["https://www.googleapis.com/auth/admin.directory.group.member"]
 GROUP_EMAIL = os.environ.get("NEWSLETTER_GROUP_EMAIL", "mailing@kelvin-symphony.co.uk")
 GROUP_MANAGER = os.environ.get("NEWSLETTER_GROUP_MANAGER", "tickets@kelvin-symphony.co.uk")
 
@@ -38,48 +41,34 @@ class NotSubscribed(Exception):
 
 
 @lru_cache(maxsize=1)
-def _groups_service():
+def _directory_service():
     # Built lazily so a missing/invalid credential doesn't break the whole site at import time
     info = json.loads(base64.b64decode(os.environ["GOOGLE_SERVICE_ACCOUNT_B64"]))
     creds = service_account.Credentials.from_service_account_info(
         info, scopes=SCOPES
     ).with_subject(GROUP_MANAGER)
-    return build("cloudidentity", "v1", credentials=creds, cache_discovery=False)
-
-
-@lru_cache(maxsize=1)
-def _group_name():
-    # Resolves the group's email to its resource name, e.g. "groups/01abc..."
-    return _groups_service().groups().lookup(groupKey_id=GROUP_EMAIL).execute()["name"]
+    return build("admin", "directory_v1", credentials=creds, cache_discovery=False)
 
 
 def subscribe(email):
     """Add `email` to the newsletter Google Group as a regular member."""
     try:
-        _groups_service().groups().memberships().create(
-            parent=_group_name(),
-            body={"preferredMemberKey": {"id": email}, "roles": [{"name": "MEMBER"}]},
+        _directory_service().members().insert(
+            groupKey=GROUP_EMAIL, body={"email": email, "role": "MEMBER"}
         ).execute()
     except HttpError as e:
-        # 409 = membership already exists
+        # 409 = member already exists
         if e.resp.status == 409:
             raise AlreadySubscribed(email)
         raise
 
 
 def membership_name(email):
-    """Return the membership resource name for `email`, or raise NotSubscribed."""
+    """Confirm `email` is a member of the group, or raise NotSubscribed."""
     try:
-        return _groups_service().groups().memberships().lookup(
-            parent=_group_name(), memberKey_id=email
-        ).execute()["name"]
+        return _directory_service().members().get(groupKey=GROUP_EMAIL, memberKey=email).execute()["email"]
     except HttpError as e:
         if e.resp.status == 404:
-            raise NotSubscribed(email)
-        if e.resp.status == 403:
-            # Cloud Identity answers 403 (Error 2028) rather than 404 for non-members.
-            # If the group itself is still readable, it's a non-member, not a real permission problem.
-            _groups_service().groups().get(name=_group_name()).execute()
             raise NotSubscribed(email)
         raise
 
@@ -87,7 +76,7 @@ def membership_name(email):
 def unsubscribe(email):
     """Remove `email` from the newsletter Google Group."""
     try:
-        _groups_service().groups().memberships().delete(name=membership_name(email)).execute()
+        _directory_service().members().delete(groupKey=GROUP_EMAIL, memberKey=email).execute()
     except HttpError as e:
         if e.resp.status == 404:
             raise NotSubscribed(email)
