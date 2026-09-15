@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Join Us - Kelvin Symphony Orchestra{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative h-96 flex items-center justify-center text-white overflow-hidden">
+  <!-- Blurred background image -->
+  <div
+    class="absolute inset-0 bg-cover bg-center bg-[url('{% static 'img/home/home_banner.jpg' %}')] filter blur-sm"
+  ></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/60"></div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-6 pt-40 text-center">
+        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight animate-fade-in">
+            Join Us
+        </h1>
+    </div>
+</section>
+
+<!-- Student run Section -->
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="grid gap-12 items-center"><div>
+                <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                    Auditions
+                </h2>
+                <p class="text-lg text-gray-600 mb-4 leading-relaxed">
+                    We’re really excited to see that you’re interested in applying for Kelvin.
+            At Kelvin we wish for the orchestra to be as satisfying and challenging as possible while
+            keeping things fair for all members.  To achieve this, the orchestra is auditioned new each
+            year, regardless if you are a new or previous member.
+                </p>
+                <p class="text-lg text-gray-600 mb-4 leading-relaxed">
+                    The vast majority if the members are not music students but from other disciplines the likes of the sciences, engineering and the humanities. We also have members from other universities in the Glasgow area like the University of Strathclyde and the Royal Conservatoire of Scotland (RCS)
+                </p>
+                <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                    Every year we run an audition cycle during the first few weeks of the academic year. For more information see below, and keep an eye on our socials!
+                </p>
+
+                {% if not sections %}
+                <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                    We are just finalising some audition details before publishing them. For now, please <a href="{% url 'newsletter' %}" class="text-kelvin hover:text-kelvin-dark underline">sign up to our mailing list</a> and keep an eye on our socials!
+                </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if sections %}
+<!-- Audition Sections -->
+<section class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Audition <span class="text-kelvin">Sections</span></h2>
+            <p class="text-lg text-gray-600">Find your section below for dates, excerpts and booking</p>
+        </div>
+
+        <!-- Flex-wrap rather than grid so a leftover card on the last row is centred -->
+        <div class="flex flex-wrap justify-center gap-8">
+            {% for section in sections %}
+            <div class="w-full md:w-[calc(50%-1rem)] bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all flex flex-col">
+                <div class="bg-gradient-to-br from-kelvin to-kelvin-dark px-8 py-6 text-white">
+                    <h3 class="text-2xl lg:text-3xl font-bold">{{ section.name }}</h3>
+                </div>
+
+                <div class="p-8 flex flex-col flex-1">
+                    {% if section.description %}
+                    <div class="text-gray-600 leading-relaxed mb-6">{{ section.description|linebreaks }}</div>
+                    {% endif %}
+
+                    {% if section.dates.all %}
+                    <h4 class="text-lg font-semibold text-gray-900 mb-3">Dates &amp; Locations</h4>
+                    <ul class="space-y-3 mb-6">
+                        {% for date in section.dates.all %}
+                        <li class="text-gray-600">
+                            <div class="flex items-center gap-2">
+                                <i class="far fa-calendar text-kelvin w-5"></i>
+                                <span class="font-medium text-gray-900">{{ date.date|date:"l j F Y" }}</span>
+                            </div>
+                            {% if date.start_time %}
+                            <div class="flex items-center gap-2">
+                                <i class="far fa-clock text-kelvin w-5"></i>
+                                <span>{{ date.start_time|time:"H:i" }}{% if date.end_time %} – {{ date.end_time|time:"H:i" }}{% endif %}</span>
+                            </div>
+                            {% endif %}
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-map-marker-alt text-kelvin w-5"></i>
+                                <span>{{ date.location }}</span>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+
+                    {% if section.excerpts.all %}
+                    <h4 class="text-lg font-semibold text-gray-900 mb-3">Excerpts</h4>
+                    <ul class="space-y-2 mb-6">
+                        {% for excerpt in section.excerpts.all %}
+                        <li>
+                            <a href="{{ excerpt.pdf.url }}" target="_blank" rel="noopener"
+                               class="flex items-center gap-2 text-gray-600 hover:text-kelvin transition-colors">
+                                <i class="fas fa-file-pdf text-kelvin w-5"></i>
+                                <span class="underline">{{ excerpt.title }}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+
+                    {% if section.form_url or section.booking_url %}
+                    <div class="mt-auto pt-2">
+                        {% if section.form_url and section.booking_url %}
+                        <p class="text-sm text-gray-500 mb-4">Please fill in the audition form before booking your slot.</p>
+                        {% endif %}
+                        <div class="flex flex-wrap gap-3">
+                            {% if section.form_url %}
+                            <a href="{{ section.form_url }}" target="_blank" rel="noopener"
+                               class="bg-transparent border-2 border-kelvin text-kelvin px-8 py-3 rounded-full font-semibold hover:bg-kelvin hover:text-white transition-all">
+                                <i class="far fa-file-alt mr-2"></i>Audition Form
+                            </a>
+                            {% endif %}
+                            {% if section.booking_url %}
+                            <button type="button" data-booking-url="{{ section.booking_url }}" data-section="{{ section.name }}"
+                                    class="bg-kelvin text-white px-8 py-3 rounded-full font-semibold hover:bg-kelvin-dark hover:shadow-lg hover:-translate-y-1 transition-all">
+                                <i class="far fa-calendar-check mr-2"></i>Book an Audition
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Booking pop-up -->
+<div id="bookingModal" class="hidden fixed inset-0 z-[60] items-center justify-center bg-black/70 p-4" role="dialog" aria-modal="true" aria-labelledby="bookingTitle">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden">
+        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-gray-200">
+            <h3 id="bookingTitle" class="text-xl font-bold text-gray-900">Book an Audition</h3>
+            <div class="flex items-center gap-4">
+                <a id="bookingNewTab" href="#" target="_blank" rel="noopener" class="hidden sm:inline text-sm text-gray-500 hover:text-kelvin transition-colors">
+                    Open in new tab <i class="fas fa-external-link-alt ml-1"></i>
+                </a>
+                <button id="bookingClose" type="button" aria-label="Close"
+                        class="w-10 h-10 rounded-full bg-gray-100 hover:bg-kelvin text-gray-600 hover:text-white flex items-center justify-center transition-all">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <iframe id="bookingFrame" src="about:blank" title="Audition booking" class="flex-1 w-full border-0"></iframe>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+{% if sections %}
+<script>
+    const bookingModal = document.getElementById('bookingModal');
+    const bookingFrame = document.getElementById('bookingFrame');
+    const bookingTitle = document.getElementById('bookingTitle');
+    const bookingNewTab = document.getElementById('bookingNewTab');
+    const bookingClose = document.getElementById('bookingClose');
+    let bookingTrigger = null;
+
+    function openBooking(button) {
+        bookingTrigger = button;
+        bookingFrame.src = button.dataset.bookingUrl;
+        bookingNewTab.href = button.dataset.bookingUrl;
+        bookingTitle.textContent = `Book an Audition – ${button.dataset.section}`;
+        bookingModal.classList.remove('hidden');
+        bookingModal.classList.add('flex');
+        document.body.classList.add('overflow-hidden');
+        bookingClose.focus();
+    }
+
+    function closeBooking() {
+        bookingModal.classList.add('hidden');
+        bookingModal.classList.remove('flex');
+        document.body.classList.remove('overflow-hidden');
+        bookingFrame.src = 'about:blank';
+        if (bookingTrigger) bookingTrigger.focus();
+    }
+
+    document.querySelectorAll('[data-booking-url]').forEach((button) => {
+        button.addEventListener('click', () => openBooking(button));
+    });
+    bookingClose.addEventListener('click', closeBooking);
+
+    // Clicking the darkened background or pressing Escape also closes it
+    bookingModal.addEventListener('click', (e) => {
+        if (e.target === bookingModal) closeBooking();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !bookingModal.classList.contains('hidden')) closeBooking();
+    });
+</script>
+{% endif %}
+{% endblock %}

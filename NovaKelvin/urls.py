@@ -15,6 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.urls import include, path, re_path
 from django.urls import include, path
 from django.conf.urls.static import static
 from django.conf import settings
@@ -23,12 +24,31 @@ from django.views.static import serve
 from main_site import views as ms_views
 from ticketing import views as ts_views
 
+import django_saml2_auth.views
+
+
 urlpatterns = [
+    # SAML2 URLs — must come BEFORE other url patterns
+    re_path(r'^sso/', include('django_saml2_auth.urls')),
+
+    # Replace default login with SAML login
+    re_path(r'^accounts/login/$', django_saml2_auth.views.signin),
+
+    # Optionally replace admin login too
+    re_path(r'^admin/login/$', django_saml2_auth.views.signin),
+    # Fallback username/password login for non-SAML accounts (e.g. if Google sign-in is broken)
+    # Slash optional: the admin's catch-all sends logged-out users to SAML before APPEND_SLASH can add it
+    re_path(r'^admin/password-login/?$', admin.site.login, name='admin_password_login'),
     path('admin/', admin.site.urls),
     path('', ms_views.home, name='home'),
     path('about', ms_views.about, name='about'),
     path('about/committee', ms_views.committee, name='committee'),
-    path('about/past_concerts', ms_views.pastconcerts, name='pastconcerts'),
+    path('about/past-concerts', ms_views.pastconcerts, name='pastconcerts'),
+    path('about/join', ms_views.joinus, name='joinus'),
+    path('newsletter', ms_views.newsletter, name='newsletter'),
+    path('newsletter/confirm', ms_views.newsletter_confirm, name='newsletter_confirm'),
+    path('newsletter/unsubscribe', ms_views.newsletter_unsubscribe, name='newsletter_unsubscribe'),
+    path('newsletter/unsubscribe/confirm', ms_views.newsletter_unsubscribe_confirm, name='newsletter_unsubscribe_confirm'),
 
     path("tickets/", ts_views.ticketing_page, name="ticketing_home"),
     path("tickets/success", ts_views.ticketing_success, name="ticketing_success"),

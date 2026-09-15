@@ -2,8 +2,13 @@ from ticketing import models as ts_models
 from rest_framework.response import Response
 from django.utils import timezone
 from rest_framework import status
+from decimal import Decimal
 
+import secrets, string
 import stripe
+
+from ticketing.email_handler import send_confirmation_email
+
 
 def handle_webhook(event):
     try:
@@ -27,21 +32,35 @@ def webhook_successful(event):
         # Find the pending order
         order = ts_models.Order.objects.get(stripe_session_id=session_id)
 
+        # Stripe objects no longer subclass dict as of stripe-python 15, so read
+        # them by attribute rather than with .get().
+        customer_details = getattr(session, 'customer_details', None)
+
         # Update order with customer details and confirm it
-        order.customer_email = session.get('customer_details', {}).get('email', '')
-        order.customer_name = session.get('customer_details', {}).get('name', '')
+        order.customer_email = getattr(customer_details, 'email', '') or ''
+        order.customer_name = getattr(customer_details, 'name', '') or ''
+        order.total_amount = Decimal(session.amount_total or 0) / 100
+        order.currency = (session.currency or 'gbp').upper()
         order.status = 'confirmed'
         order.confirmed_at = timezone.now()
         order.save()
 
-        line_items = stripe.checkout.Session.list_line_items(session_id)['data']
+        line_items = stripe.checkout.Session.list_line_items(session_id, limit=100).data
 
         print(line_items)
 
         # Create ticket in DB
         for line_item in line_items:
             print(line_item)
-            ticket_type = ts_models.TicketType.objects.get(price_id=line_item["price"]["id"])
+            price_id = line_item["price"]["id"]
+
+            # Donations are sold as bare Stripe prices with no TicketType behind
+            # them, so skip anything we don't recognise instead of aborting.
+            try:
+                ticket_type = ts_models.TicketType.objects.get(price_id=price_id)
+            except ts_models.TicketType.DoesNotExist:
+                print(f"No ticket type for price {price_id}, skipping")
+                continue
 
             print(ticket_type)
 
@@ -53,9 +72,16 @@ def webhook_successful(event):
                 ticket.transaction_ID = order.stripe_session_id
                 ticket.for_concert = ticket_type.for_concert
                 ticket.change_log += f"[{timezone.now()}] - Ticket added to database."
+
+                while ticket.ticket_ID is None or ts_models.Ticket.objects.filter(ticket_ID=ticket.ticket_ID).exists():
+                    ticket.ticket_ID = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(16))
+
                 ticket.save()
+                order.tickets.add(ticket)
 
                 ticket_type.recalculate_quantities_for_cluster(ticket_type)
+
+        send_confirmation_email(order)
 
         # TODO: Send confirmation email here
         print(f"Order {order.id} confirmed for {order.customer_email}")

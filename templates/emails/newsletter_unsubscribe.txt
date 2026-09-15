@@ -1,0 +1,17 @@
+KELVIN SYMPHONY ORCHESTRA
+Confirm unsubscribe
+
+We received a request to unsubscribe this address from the Kelvin Symphony
+Orchestra mailing list ({{ group_email }}).
+
+To confirm, open this link and click "Unsubscribe me":
+{{ confirm_url }}
+
+The link expires in {{ expiry_days }} days. If you didn't ask to unsubscribe,
+you can ignore this email and you'll stay on the list.
+
+Questions? Email {{ support_email|default:"info@kelvin-symphony.co.uk" }}
+
+Kelvin Symphony Orchestra
+University of Glasgow · 14 University Gardens, Glasgow, United Kingdom
+© {{ current_year|default:2026 }} Kelvin Symphony Orchestra. A registered charity, entirely student-run.
