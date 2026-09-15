@@ -36,6 +36,9 @@ urlpatterns = [
 
     # Optionally replace admin login too
     re_path(r'^admin/login/$', django_saml2_auth.views.signin),
+    # Fallback username/password login for non-SAML accounts (e.g. if Google sign-in is broken)
+    # Slash optional: the admin's catch-all sends logged-out users to SAML before APPEND_SLASH can add it
+    re_path(r'^admin/password-login/?$', admin.site.login, name='admin_password_login'),
     path('admin/', admin.site.urls),
     path('', ms_views.home, name='home'),
     path('about', ms_views.about, name='about'),

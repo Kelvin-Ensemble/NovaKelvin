@@ -4,22 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48ce7faf-ed2d-4f37-84ac-1fa1d42b874c" name="Changes" comment="mostly updated links">
-      <change beforePath="$PROJECT_DIR$/.idea/claudeCodeTabState.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/claudeCodeTabState.xml" afterDir="false" />
+    <list default="true" id="48ce7faf-ed2d-4f37-84ac-1fa1d42b874c" name="Changes" comment="disabled under construction middleware">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NovaKelvin/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/NovaKelvin/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NovaKelvin/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/NovaKelvin/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_site/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_site/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_site/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_site/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main_site/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_site/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/about.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/about.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/committee.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/committee.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/join_us.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/join_us.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/past_concerts.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/past_concerts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/theme/static/css/dist/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/theme/static/css/dist/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/email_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/email_handler.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -193,7 +185,7 @@
       <workItem from="1786621644304" duration="1649000" />
       <workItem from="1788783235779" duration="545000" />
       <workItem from="1788978781494" duration="11501000" />
-      <workItem from="1789384731399" duration="5824000" />
+      <workItem from="1789384731399" duration="10516000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit - Homepage there, about page wip">
       <option name="closed" value="true" />
@@ -267,7 +259,31 @@
       <option name="project" value="LOCAL" />
       <updated>1788979551375</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="I think ready for deployment?">
+      <option name="closed" value="true" />
+      <created>1789429851245</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1789429851245</updated>
+    </task>
+    <task id="LOCAL-00011" summary="For some reason these were unversioned?">
+      <option name="closed" value="true" />
+      <created>1789430016774</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1789430016774</updated>
+    </task>
+    <task id="LOCAL-00012" summary="disabled under construction middleware">
+      <option name="closed" value="true" />
+      <created>1789430137339</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1789430137339</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -293,6 +309,9 @@
     <MESSAGE value="an attempt at getting it to deploy on railway" />
     <MESSAGE value="fixed requirement.txt encoding" />
     <MESSAGE value="mostly updated links" />
-    <option name="LAST_COMMIT_MESSAGE" value="mostly updated links" />
+    <MESSAGE value="I think ready for deployment?" />
+    <MESSAGE value="For some reason these were unversioned?" />
+    <MESSAGE value="disabled under construction middleware" />
+    <option name="LAST_COMMIT_MESSAGE" value="disabled under construction middleware" />
   </component>
 </project>

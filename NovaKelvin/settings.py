@@ -182,6 +182,10 @@ if DEBUG:
         "django_browser_reload.middleware.BrowserReloadMiddleware",
     ]
 
+# Where the password login (/admin/password-login) sends people when there's no ?next=.
+# Unfold's login form has no hidden "next" field, so without this it goes to /accounts/profile/
+LOGIN_REDIRECT_URL = '/admin/'
+
 # Per-deployment SAML addresses; both must match the Google SAML app (ACS URL and Entity ID)
 SAML_ASSERTION_URL = os.environ.get('SAML_ASSERTION_URL', 'https://staging.kelvin-symphony.co.uk').rstrip('/')
 SAML_ENTITY_ID = os.environ.get('SAML_ENTITY_ID', f'{SAML_ASSERTION_URL}/sso/acs/')

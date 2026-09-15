@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from main_site.models import CommitteeMember,PastConcert
+from main_site.models import CommitteeMember,PastConcert,AuditionSection
 
 # Create your views here.
 
@@ -28,7 +28,10 @@ def pastconcerts(request):
     })
 
 def joinus(request):
-    return render(request, 'website/../join_us.html')
+    sections = AuditionSection.objects.filter(is_published=True).prefetch_related('dates', 'excerpts')
+    return render(request, 'website/../join_us.html', {
+        'sections': sections
+    })
 
 def newsletter(request):
     return render(request, 'newsletter.html')
