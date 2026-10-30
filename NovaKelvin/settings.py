@@ -214,6 +214,10 @@ SAML2_AUTH = {
     'AUTHN_REQUESTS_SIGNED': False,  # Google doesn't require signed requests
     'LOGOUT_REQUESTS_SIGNED': False,
 
+    # Force Google to re-prompt (incl. account chooser) instead of silently
+    # reusing whatever Google session cookie is already in the browser
+    'FORCE_AUTHN': True,
+
     'DEFAULT_NEXT_URL': '/admin/',  # Where to send users after login
     'CREATE_USER': True,
     'NEW_USER_PROFILE': {
