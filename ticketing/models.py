@@ -166,11 +166,19 @@ def update_tickettype_quantities_on_save(sender, instance, **kwargs):
 @receiver(post_delete, sender=Ticket)
 def update_tickettype_quantities_on_delete(sender, instance, **kwargs):
     """
-    Whenever a Ticket is deleted, recalc the quantities
-    for its TicketType cluster.
+    Whenever a Ticket is deleted, recalc the quantities for its TicketType
+    cluster — unless the TicketType was deleted in the same cascade (e.g.
+    deleting its Concert). TicketType has no delete signal of its own, so
+    Django's collector removes those rows in an upfront bulk delete, before
+    this Ticket signal runs; there's nothing left to recalculate for it.
     """
-    if instance.ticket_type_id:
-        TicketType.recalculate_quantities_for_cluster(instance.ticket_type)
+    if not instance.ticket_type_id:
+        return
+    try:
+        ticket_type = instance.ticket_type
+    except TicketType.DoesNotExist:
+        return
+    TicketType.recalculate_quantities_for_cluster(ticket_type)
 
 
 class Order(models.Model):
