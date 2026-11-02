@@ -30,12 +30,16 @@ import django_saml2_auth.views
 urlpatterns = [
     # SAML2 URLs — must come BEFORE other url patterns
     re_path(r'^sso/', include('django_saml2_auth.urls')),
+    # The real SAML sign-in redirect, kept at its own path so the account-chooser
+    # interstitial below can link to it directly
+    re_path(r'^sso/signin/$', django_saml2_auth.views.signin, name='saml_signin'),
 
-    # Replace default login with SAML login
-    re_path(r'^accounts/login/$', django_saml2_auth.views.signin),
+    # Replace default login with an interstitial that offers switching Google
+    # accounts before handing off to SAML sign-in
+    re_path(r'^accounts/login/$', ms_views.sso_choose_account),
 
     # Optionally replace admin login too
-    re_path(r'^admin/login/$', django_saml2_auth.views.signin),
+    re_path(r'^admin/login/$', ms_views.sso_choose_account),
     # Fallback username/password login for non-SAML accounts (e.g. if Google sign-in is broken)
     # Slash optional: the admin's catch-all sends logged-out users to SAML before APPEND_SLASH can add it
     re_path(r'^admin/password-login/?$', admin.site.login, name='admin_password_login'),
