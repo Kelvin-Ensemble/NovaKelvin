@@ -224,3 +224,29 @@ LOGIN_REDIRECT_URL_FAILURE = '/admin/login/'
 # POST-back, so the cookies no longer need SameSite=None.
 SESSION_COOKIE_SECURE = True  # must be True on HTTPS
 CSRF_COOKIE_SECURE = True
+
+# Without this, Django falls back to its bare default logging config, which is easy
+# to lose in a hosting platform's log stream. Explicitly send 5xx tracebacks (and our
+# own app logging) to stdout so they show up in Railway's logs.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        # Unhandled exceptions in views (what shows up as a 500) are logged here
+        # by Django with the full traceback.
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    },
+}
