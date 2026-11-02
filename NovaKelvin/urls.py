@@ -24,20 +24,19 @@ from django.views.static import serve
 from main_site import views as ms_views
 from ticketing import views as ts_views
 
-import django_saml2_auth.views
+from mozilla_django_oidc.views import OIDCAuthenticationRequestView
 
 
 urlpatterns = [
-    # SAML2 URLs — must come BEFORE other url patterns
-    re_path(r'^sso/', include('django_saml2_auth.urls')),
+    path('oidc/', include('mozilla_django_oidc.urls')),
 
-    # Replace default login with SAML login
-    re_path(r'^accounts/login/$', django_saml2_auth.views.signin),
+    # Replace default login with Google OIDC login
+    re_path(r'^accounts/login/$', OIDCAuthenticationRequestView.as_view()),
 
     # Optionally replace admin login too
-    re_path(r'^admin/login/$', django_saml2_auth.views.signin),
-    # Fallback username/password login for non-SAML accounts (e.g. if Google sign-in is broken)
-    # Slash optional: the admin's catch-all sends logged-out users to SAML before APPEND_SLASH can add it
+    re_path(r'^admin/login/$', OIDCAuthenticationRequestView.as_view()),
+    # Fallback username/password login (e.g. if Google sign-in is broken)
+    # Slash optional: the admin's catch-all sends logged-out users to OIDC before APPEND_SLASH can add it
     re_path(r'^admin/password-login/?$', admin.site.login, name='admin_password_login'),
     path('admin/', admin.site.urls),
     path('', ms_views.home, name='home'),
