@@ -27,8 +27,6 @@ creds = service_account.Credentials.from_service_account_info(
     info, scopes=SCOPES
 ).with_subject(SENDER_ADDRESS)
 
-service = build("gmail", "v1", credentials=creds)
-
 
 CURRENCY_SYMBOLS = {"GBP": "£", "USD": "$", "EUR": "€"}
 
@@ -110,6 +108,10 @@ def send_confirmation_email(order):
 
 
         raw = base64.urlsafe_b64encode(message.message().as_bytes()).decode()
+        # Built fresh per send rather than reused from a module-level singleton: a
+        # long-lived httplib2 connection goes stale after the gaps between orders,
+        # and reusing a dead one raises BrokenPipeError on write.
+        service = build("gmail", "v1", credentials=creds)
         result = service.users().messages().send(userId="me", body={"raw": raw}).execute()
         print("Sent, id:", result.get("id"))
         return result
