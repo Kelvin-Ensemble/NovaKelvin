@@ -109,10 +109,10 @@
                     </div>
                 </div>
 
-                <a href="" class="text-white hover:text-kelvin-light transition-colors text-lg font-medium">Upcoming (WIP)</a>
+{#                <a href="" class="text-white hover:text-kelvin-light transition-colors text-lg font-medium">Upcoming (WIP)</a>#}
                 <a href="#" onclick="window.scrollTo(0, document.body.scrollHeight)" class="text-white hover:text-kelvin-light transition-colors text-lg font-medium">Contact</a>
-                <a href="" class="bg-kelvin text-white px-6 py-3 rounded-full font-semibold hover:bg-kelvin-dark transition-colors inline-block text-center mt-4">
-                    Buy Tickets (WIP)
+                <a href="{% url 'ticketing_home' %}" class="bg-kelvin text-white px-6 py-3 rounded-full font-semibold hover:bg-kelvin-dark transition-colors inline-block text-center mt-4">
+                    Buy Tickets
                 </a>
             </div>
         </div>
@@ -152,8 +152,8 @@
                     <ul class="space-y-2">
                         <li><a href="{% url 'home' %}" class="text-gray-400 hover:text-kelvin-light transition-colors">Home</a></li>
                         <li><a href="{% url 'about' %}" class="text-gray-400 hover:text-kelvin-light transition-colors">About Us</a></li>
-                        <li><a href="" class="text-gray-400 hover:text-kelvin-light transition-colors">Upcoming (WIP)</a></li>
-                        <li><a href="" class="text-gray-400 hover:text-kelvin-light transition-colors">Buy Tickets (WIP)</a></li>
+{#                        <li><a href="" class="text-gray-400 hover:text-kelvin-light transition-colors">Upcoming (WIP)</a></li>#}
+                        <li><a href="{% url 'ticketing_home' %}" class="text-gray-400 hover:text-kelvin-light transition-colors">Buy Tickets</a></li>
                         <li><a href="{% url 'admin:login' %}" class="text-gray-400 hover:text-kelvin-light transition-colors">Committee Log-in</a></li>
                     </ul>
                 </div>
