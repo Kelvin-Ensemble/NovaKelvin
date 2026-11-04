@@ -74,11 +74,11 @@
                         </div>
                     </li>
 
-                    <li><a href="" class="text-white hover:text-kelvin-light transition-colors font-medium">Upcoming (WIP)</a></li>
+{#                    <li><a href="" class="text-white hover:text-kelvin-light transition-colors font-medium">Upcoming (WIP)</a></li>#}
                     <li><a onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})" class="text-white hover:text-kelvin-light transition-colors font-medium">Contact</a></li>
                     <li>
-                        <a href="" class="bg-kelvin text-white px-6 py-2.5 rounded-full font-semibold hover:bg-kelvin-dark hover:shadow-lg hover:-translate-y-0.5 transition-all inline-block">
-                            Buy Tickets (WIP)
+                        <a href="{% url 'ticketing_home' %}" class="bg-kelvin text-white px-6 py-2.5 rounded-full font-semibold hover:bg-kelvin-dark hover:shadow-lg hover:-translate-y-0.5 transition-all inline-block">
+                            Buy Tickets
                         </a>
                     </li>
                 </ul>
