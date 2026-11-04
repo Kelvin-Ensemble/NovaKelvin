@@ -25,11 +25,11 @@ export default function TicketsPage() {
 
   const donationAmounts = [1, 3, 5, 10, 20];
   const donationIDs = [
-    'price_1SwoSQBzBUhSO3Hm2IkluMX9',
-    'price_1SwoSbBzBUhSO3HmvkI7xpBp',
-    'price_1SwoShBzBUhSO3HmUhMi7JnE',
-    'price_1SwoSoBzBUhSO3HmrgjQqsPu',
-    'price_1SwoStBzBUhSO3HmQkZVtFqc'
+    'price_1SUueKJsBv7g4PXsw3IY782q',
+    'price_1SUufuJsBv7g4PXsQr7ltgIx',
+    'price_1SUufuJsBv7g4PXsp9IG1QRs',
+    'price_1SUufvJsBv7g4PXs1XrvDscx',
+    'price_1SUufuJsBv7g4PXsdA83dJti'
   ];
 
   // Fetch concerts on mount

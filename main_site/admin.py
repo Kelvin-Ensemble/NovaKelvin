@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib import admin
+from django.contrib import admin, messages
 from unfold.admin import ModelAdmin, TabularInline
 from django.urls import reverse
 from django.utils.html import format_html_join
@@ -17,6 +17,7 @@ from ticketing.models import Ticket, Concert
 
 from main_site.models import CommitteeMember, PastConcert, AuditionSection, AuditionDate, AuditionExcerpt
 from ticketing.models import Concert, TicketType, Ticket, Order
+from ticketing.email_handler import send_confirmation_email
 
 # from import_export.admin import ExportMixin
 # from import_export.admin import ImportExportModelAdmin
@@ -184,7 +185,27 @@ class ticketAdmin(ModelAdmin):
 
 admin.site.register(CommitteeMember)
 admin.site.register(PastConcert)
-admin.site.register(Order)
+
+
+@admin.register(Order)
+class OrderAdmin(ModelAdmin):
+    list_display = ("id", "stripe_session_id", "status", "customer_email", "customer_name", "total_amount", "created_at")
+    list_filter = ("status",)
+    search_fields = ("stripe_session_id", "customer_email", "customer_name")
+    actions = ["send_tickets"]
+
+    @admin.action(description="Send tickets")
+    def send_tickets(self, request, queryset):
+        sent = 0
+        for order in queryset:
+            try:
+                send_confirmation_email(order)
+                sent += 1
+            except Exception as exc:
+                self.message_user(request, f"Order #{order.id}: failed to send — {exc}", level=messages.ERROR)
+
+        if sent:
+            self.message_user(request, f"Sent {sent} ticket confirmation email(s).")
 
 
 class AuditionDateInline(TabularInline):

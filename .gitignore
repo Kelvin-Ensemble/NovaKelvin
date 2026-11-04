@@ -1,10 +1,65 @@
-.venv/
+# === Environment / secrets ===
 .env
+.env.*
+!.env.example
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+ENV/
+.python-version
+
+# === Django ===
+staticfiles/
+media/
+*.log
+local_settings.py
+celerybeat-schedule
+celerybeat.pid
+
+# === Testing / coverage ===
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+nosetests.xml
+coverage.xml
+
+# === Node / React (Vite, CRA, django-tailwind, etc.) ===
+node_modules/
+dist/
+dist-ssr/
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnpm-store/
+
+# === OS cruft ===
+.DS_Store
+Thumbs.db
+desktop.ini
 
 # For IntelliJ idea based IDEs:
 
+# Ignore the whole .idea directory - simpler than tracking select files,
+# and everything in here is machine/user-specific IDE state anyway.
+.idea/
+
 # Covers JetBrains IDEs: IntelliJ, GoLand, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+# (Kept below for reference / in case you switch to tracking select .idea files later.)
 
 # User-specific stuff
 .idea/workspace.xml

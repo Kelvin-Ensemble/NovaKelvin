@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     "ticketing",
     'rest_framework',  # Add Django Rest Framework
     'api',  # Add your app
-    'django_saml2_auth',
+    'mozilla_django_oidc',
 ]
 
 TAILWIND_APP_NAME = "theme"
@@ -186,53 +186,67 @@ if DEBUG:
 # Unfold's login form has no hidden "next" field, so without this it goes to /accounts/profile/
 LOGIN_REDIRECT_URL = '/admin/'
 
-# Per-deployment SAML addresses; both must match the Google SAML app (ACS URL and Entity ID)
-SAML_ASSERTION_URL = os.environ.get('SAML_ASSERTION_URL', 'https://staging.kelvin-symphony.co.uk').rstrip('/')
-SAML_ENTITY_ID = os.environ.get('SAML_ENTITY_ID', f'{SAML_ASSERTION_URL}/sso/acs/')
+# Google OIDC sign-in for the admin. Create the OAuth 2.0 Client ID (Web
+# application) in the same GCP project already used for the newsletter
+# service account; redirect URI is <site>/oidc/callback/.
+AUTHENTICATION_BACKENDS = [
+    'main_site.oidc.GoogleWorkspaceOIDCBackend',
+    'django.contrib.auth.backends.ModelBackend',  # fallback: /admin/password-login
+]
 
-SAML2_AUTH = {
-    # Paste the metadata URL from Google Admin here
-    # 'METADATA_AUTO_CONF_URL': 'https://accounts.google.com/o/saml2/idp?idpid=C03eq3bhc',
-    'METADATA_LOCAL_FILE_PATH': BASE_DIR / 'saml' / 'GoogleIDPMetadata.xml',
-    'ASSERTION_URL': SAML_ASSERTION_URL,  # Your site's base URL
-    'ENTITY_ID': SAML_ENTITY_ID,
+# Only this Google Workspace domain's accounts may sign in/be created. Unlike the old
+# Workspace-restricted SAML app, Google's OIDC client will authenticate *any* Google
+# account, so this check is what replaces Google-side entitlement.
+GOOGLE_WORKSPACE_DOMAIN = os.environ.get('GOOGLE_WORKSPACE_DOMAIN', 'kelvin-symphony.co.uk')
 
-    # Google sends email as the NameID, so map accordingly
-    'ATTRIBUTES_MAP': {
-        'email': 'user.email',
-        'first_name': 'user.first_name',
-        'last_name': 'user.last_name',
-        'username': 'user.email',  # Use email as username
-    },
+OIDC_RP_CLIENT_ID = os.environ.get('GOOGLE_OIDC_CLIENT_ID')
+OIDC_RP_CLIENT_SECRET = os.environ.get('GOOGLE_OIDC_CLIENT_SECRET')
+OIDC_RP_SIGN_ALGO = 'RS256'
+OIDC_RP_SCOPES = 'openid email profile'
 
-    # Google doesn't send a token attribute, so disable this
-    'TOKEN_REQUIRED': False,
+OIDC_OP_AUTHORIZATION_ENDPOINT = 'https://accounts.google.com/o/oauth2/v2/auth'
+OIDC_OP_TOKEN_ENDPOINT = 'https://oauth2.googleapis.com/token'
+OIDC_OP_USER_ENDPOINT = 'https://openidconnect.googleapis.com/v1/userinfo'
+OIDC_OP_JWKS_ENDPOINT = 'https://www.googleapis.com/oauth2/v3/certs'
 
-    # Google signs responses but not always assertions individually
-    'WANT_ASSERTIONS_SIGNED': False,
-    'WANT_RESPONSE_SIGNED': True,
-    'AUTHN_REQUESTS_SIGNED': False,  # Google doesn't require signed requests
-    'LOGOUT_REQUESTS_SIGNED': False,
-
-    'DEFAULT_NEXT_URL': '/admin/',  # Where to send users after login
-    'CREATE_USER': True,
-    'NEW_USER_PROFILE': {
-        'USER_GROUPS': ['Committee'],
-        'ACTIVE_STATUS': True,
-        'STAFF_STATUS': True,
-        'SUPERUSER_STATUS': False,
-    },
-
-    'DEBUG': True,
-    'LOGGING': {
-        'version': 1,
-        'handlers': {'stdout': {'class': 'logging.StreamHandler', 'level': 'DEBUG'}},
-        'loggers': {'saml2': {'level': 'DEBUG'}},
-        'root': {'level': 'DEBUG', 'handlers': ['stdout']},
-    },
+# This is the whole point of the migration: ask Google to show its account
+# chooser every time, instead of silently reusing whatever Google session
+# cookie is already in the browser. `hd` is belt-and-braces pre-filtering on
+# Google's side; GoogleWorkspaceOIDCBackend.verify_claims is the real check.
+OIDC_AUTH_REQUEST_EXTRA_PARAMS = {
+    'prompt': 'select_account',
+    'hd': GOOGLE_WORKSPACE_DOMAIN,
 }
 
+LOGIN_REDIRECT_URL_FAILURE = '/admin/login/'
+
+# The callback is a same-site GET redirect from Google, not SAML's cross-site
+# POST-back, so the cookies no longer need SameSite=None.
 SESSION_COOKIE_SECURE = True  # must be True on HTTPS
-SESSION_COOKIE_SAMESITE = 'None'  # required for POST-back from Google
-CSRF_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SECURE = True
+
+# Without this, Django falls back to its bare default logging config, which is easy
+# to lose in a hosting platform's log stream. Explicitly send 5xx tracebacks (and our
+# own app logging) to stdout so they show up in Railway's logs.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        # Unhandled exceptions in views (what shows up as a 500) are logged here
+        # by Django with the full traceback.
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    },
+}
